@@ -1,0 +1,320 @@
+Introduction to CPLASS
+================
+Linh Do and Scott A. McKinley
+2025-04-18
+
+- [Call function and load package](#call-function-and-load-package)
+- [Run CPLASS on your simulated or real
+  dataset](#run-cplass-on-your-simulated-or-real-dataset)
+  - [CPLASS function](#cplass-function)
+  - [Running CPLASS](#running-cplass)
+
+In this rmarkdown file, we introduce CPLASS algorithm for detecting
+change in velocities.
+
+# Call function and load package
+
+``` r
+source("CPLASS support files/CPLASS.R")
+```
+
+    ## Rlab 4.0 attached.
+
+    ## 
+    ## Attaching package: 'Rlab'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     dexp, dgamma, dweibull, pexp, pgamma, pweibull, qexp, qgamma,
+    ##     qweibull, rexp, rgamma, rweibull
+
+    ## The following object is masked from 'package:datasets':
+    ## 
+    ##     precip
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::count()        masks Rlab::count()
+    ## ✖ purrr::cross()        masks pracma::cross()
+    ## ✖ dplyr::filter()       masks stats::filter()
+    ## ✖ dplyr::lag()          masks stats::lag()
+    ## ✖ ggplot2::resolution() masks limSolve::resolution()
+    ## ✖ tibble::view()        masks Rlab::view()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+    ## 
+    ## Attaching package: 'foreach'
+    ## 
+    ## 
+    ## The following objects are masked from 'package:purrr':
+    ## 
+    ##     accumulate, when
+    ## 
+    ## 
+    ## Loading required package: iterators
+    ## 
+    ## Loading required package: parallel
+
+``` r
+source("CPLASS support files/simulation_functions.R")
+source("CPLASS support files/plot_functions.R")
+source("CPLASS support files/csa_functions.R")
+source("CPLASS support files/msd_functions.R")
+```
+
+- “CPLASS.R” contains all functions: stochastic search, piecewise linear
+  continuous approximation, and the main CPLASS algorithm.
+
+- “simulation_functions.R” contains simulation functions associated with
+  Cook and et.al. paper on optimal framerate.
+
+- “plot_functions.R” contains all of plot functions for visualization
+  purposes.
+
+- “csa_functions.R” contains functions for calculating cummulative speed
+  allocation
+
+- “msd_function.R” contains functions for calculating mean square
+  displacement
+
+# Run CPLASS on your simulated or real dataset
+
+In this section, we will give an example of how to run CPLASS on your
+data.
+
+## CPLASS function
+
+### For a single path
+
+**Description**
+
+This function runs the Continuous Piecewise Linear Approximation with
+Stochastic Search (CPLASS) algorithm on a 2D data in the form of
+$(x_i,y_i)_{i=1}^n$ observed at time $(t_i)_{i=1}^n$ believed to follow
+a continuous piecewise linear regression model (Gaussian noise). It is
+used for detecting changes in velocity problem. CPLASS returns the time
+changes, the estimated parameters.
+
+**Usage**
+
+<pre> CPLASS(t,x, y,time_rate, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+
+**Arguments**
+
+| Argument      | Description                                                                                                                                                |
+|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **x**         | A vector containing the data sequence (Cargo locations in x-axis)                                                                                          |
+| **y**         | A vector containing the data sequence (Cargo locations in y-axis)                                                                                          |
+| **t**         | A vector containing time                                                                                                                                   |
+| **time_rate** | Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1                                                                                                           |
+| **lambda_r**  | the rate used in the proposal of a new vector of changepoints                                                                                              |
+| **iter_max**  | The maximum number of iterations for running Metropolis-Hastings searching algorithm                                                                       |
+| **burn_in**   | The number of burn-in steps in MH search algorithm                                                                                                         |
+| **s_cap**     | The threshold for the output speed. If the inferred speed exceed `s_cap` and the `speed_pen` is activated, then the extra speed penalty will be introduced |
+| **gamma**     | The power in the strengthened Schwarz Information Criterion (sSIC)                                                                                         |
+| **speed_pen** | If `TRUE`, adding the speed penalty to the penalty function; if `FALSE`, we only use the linear penalty term sSIC                                          |
+
+**Output**
+
+A list of `segment_inferred` and `path_inferred` will be returned after
+running the algorithm.
+
+- The `segment_inferred` is a tibble containing 8 columns
+
+| Columns       | Description                                                                                                                                                                    |
+|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **cp_times**  | The inferred change times                                                                                                                                                      |
+| **durations** | The inferred segment durations                                                                                                                                                 |
+| **states**    | A binary vector labeling the state of the associated segments, `0` for stationary, `1` for motile. The labels are created using the cut-off method with a threshold of 100nm/s |
+| **speeds**    | The inferred segment speeeds                                                                                                                                                   |
+| **vx**        | The inferred velocity with respect to x-axis                                                                                                                                   |
+| **vy**        | The inferred velocity with respect to y-axis                                                                                                                                   |
+
+- The `path_inferred` is a tibble containing 6 columns
+
+| Columns | Description                                                                                     |
+|---------|-------------------------------------------------------------------------------------------------|
+| **t**   | The input time                                                                                  |
+| **j**   | The label of time points corresponding to the labels of segments after using the cut-off method |
+| **x**   | The observed data with respect to x-axis                                                        |
+| **y**   | The observed data with respect to y-axis                                                        |
+| **a**   | The inferred piecewise linear lines (anchor locations w.r.t x-axis)                             |
+| **b**   | The inferred piecewise linear lines (anchor locations w.r.t y-axis)                             |
+
+### For a collection of paths
+
+For running CPLASS on a collection of paths, we introduced the function
+`CPLASS_paths`.
+
+**Usage**
+
+<pre> CPLASS_paths(data, time_rate, PARALLEL = FALSE, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+
+**Arguments**
+
+| Argument      | Description                                                                                                                                                |
+|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **data**      | A list of paths where for each path we can specify $t,x,y$                                                                                                 |
+| **time_rate** | Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1                                                                                                           |
+| **PARALLEL**  | If `TRUE`, running parallel computing; if `FALSE`, running sequentially                                                                                    |
+| **lambda_r**  | the rate used in the proposal of a new vector of changepoints                                                                                              |
+| **iter_max**  | The maximum number of iterations for running Metropolis-Hastings searching algorithm                                                                       |
+| **burn_in**   | The number of burn-in steps in MH search algorithm                                                                                                         |
+| **s_cap**     | The threshold for the output speed. If the inferred speed exceed `s_cap` and the `speed_pen` is activated, then the extra speed penalty will be introduced |
+| **gamma**     | The power in the strengthened Schwarz Information Criterion (sSIC)                                                                                         |
+| **speed_pen** | If `TRUE`, adding the speed penalty to the penalty function; if `FALSE`, we only use the linear penalty term sSIC                                          |
+
+**Output**
+
+A list of paths, in each path, there is a similar output with two
+sublists `segments_inferred` and `path_inferred` as described in the
+`CPLASS` function.
+
+## Running CPLASS
+
+``` r
+data = readRDS("data_set/CPLASS_21PN.rds") #load your data here
+```
+
+### For a single path
+
+``` r
+# Step 1: what does your path look like?
+t = data[[1]]$this_t
+x = data[[1]]$this_x
+y = data[[1]]$this_y
+time_rate = 0.05
+
+# Step 2: running CPLASS
+cplass = CPLASS(t,x,y,time_rate,iter_max = 2000) #notice that I am using the default but you can change any argument to adjust the MCMC steps, burn-in steps, speed limit threshold, turn-on or turn off the speed penalty, and so on
+```
+
+    ## [1] 1000
+    ## [1] 2000
+
+``` r
+# Step 3: save the output as .rds file
+saveRDS(cplass,file="Example_path_1_Perinuclear.rds")
+```
+
+**Visualize the results**
+
+``` r
+i=1
+motor = "Perinuclear Lysosome" #enter the name you want to display in the figure
+speed_max = c()
+speed_max = c(speed_max,max(cplass$segments_inferred$speeds))
+max_speed = ceiling(max(speed_max))
+plot_path_inferred(cplass,motor = motor,max_speed = max_speed,t_lim = c(0,30))
+```
+
+![](README_files/figure-gfm/visualize%20the%20output%20path%20from%20CPLASS-1.png)<!-- -->
+
+### For a collection of paths
+
+In this section, we give an example of how to run CPLASS on a collection
+of paths.
+
+We provide 2 options for you to use, either running sequentially or
+parallel running. If you want to use `PARALLEL` running, then please set
+it to be `TRUE`.
+
+The following code using parallel computing
+
+``` r
+# We will run on the 21PN data set with 3 paths.
+subdata = data[1:3] #contains 3 paths
+cplass_paths = CPLASS_paths(subdata, time_rate = 0.05,iter_max = 1000, PARALLEL = TRUE)
+saveRDS(cplass_paths,file="Example_3_paths_Perinuclear.rds")
+```
+
+**Visualization**
+
+Since we have a lot of paths here, it is better to save the plots into a
+pdf file to see them all together. The follow code will help us to do
+so.
+
+``` r
+path_list = cplass_paths
+
+#######################
+# for REAL DATA use the lines below.
+# choose which data you are reading (index 1 or 2)
+file_list = c("21PF","21PN")
+filestub = paste0("CPLASS Final/Real",file_list[2])
+# infile = paste0(filestub,"_cplass.rds")
+outfile = paste0(filestub,"_gallery.pdf")
+# path_list = readRDS(infile)
+path_list = cplass_paths
+# 
+motor = "Perinuclear Lysosomes" #change the name to the name of your data
+
+#######################
+# #for SIMULATED DATA use the lines below.
+# filestub = paste0("OFR Final/Sim",experiment_num,"_",theta$motor,"_",Hz,"Hz_cplass_",sp)
+# infile = paste0(filestub,".rds")
+# outfile = paste0(filestub,"_gallery_",sp,".pdf")
+# path_list = readRDS(infile)
+# 
+# if(theta$motor == "CKP"){
+#     motor = "Base"
+#   }else if(theta$motor == "kin1"){
+#     motor = "Contrast"
+#   }else if(theta$motor == "Mimic"){
+#     motor = "Mimic"
+# }
+
+
+pdf_output = TRUE
+
+if (pdf_output == TRUE){
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste("Working on path",i))
+  }
+  
+  # #REAL DATA PLOTS (dashboard)
+  # dashboard = plot_path_real(path_list[[i]],xy_width,t_lim)
+  # print(dashboard)
+
+  # SIMULATION PLOTS (dashboard)
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed)
+  print(dashboard)
+
+  # SIMULATION PLOTS (only x-y plot)
+  # plot_xy = plot_path_inferred_xy(path_list[[i]],xy_width,t_lim, motor, max_speed)
+  # print(plot_xy)
+  
+}
+
+if (pdf_output == TRUE){
+  dev.off()
+}
+```
+
+    ## quartz_off_screen 
+    ##                 2
