@@ -16,50 +16,6 @@ change in velocities.
 
 ``` r
 source("CPLASS support files/CPLASS.R")
-```
-
-    ## Rlab 4.0 attached.
-
-    ## 
-    ## Attaching package: 'Rlab'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     dexp, dgamma, dweibull, pexp, pgamma, pweibull, qexp, qgamma,
-    ##     qweibull, rexp, rgamma, rweibull
-
-    ## The following object is masked from 'package:datasets':
-    ## 
-    ##     precip
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-    ## ✔ purrr     1.0.1     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::count()        masks Rlab::count()
-    ## ✖ purrr::cross()        masks pracma::cross()
-    ## ✖ dplyr::filter()       masks stats::filter()
-    ## ✖ dplyr::lag()          masks stats::lag()
-    ## ✖ ggplot2::resolution() masks limSolve::resolution()
-    ## ✖ tibble::view()        masks Rlab::view()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-    ## 
-    ## Attaching package: 'foreach'
-    ## 
-    ## 
-    ## The following objects are masked from 'package:purrr':
-    ## 
-    ##     accumulate, when
-    ## 
-    ## 
-    ## Loading required package: iterators
-    ## 
-    ## Loading required package: parallel
-
-``` r
 source("CPLASS support files/simulation_functions.R")
 source("CPLASS support files/plot_functions.R")
 source("CPLASS support files/csa_functions.R")

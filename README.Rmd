@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 In this rmarkdown file, we introduce CPLASS algorithm for detecting change in velocities.
 
 # Call function and load package
-```{r call function, warning=FALSE}
+```{r call function, warning=FALSE, message=FALSE}
 source("CPLASS support files/CPLASS.R")
 source("CPLASS support files/simulation_functions.R")
 source("CPLASS support files/plot_functions.R")
