@@ -10,7 +10,7 @@ Linh Do and Scott A. McKinley
   - [Running CPLASS](#running-cplass)
 
 In this rmarkdown file, we introduce CPLASS algorithm for detecting
-change in velocities.
+changes in velocity.
 
 # Call function and load package
 
