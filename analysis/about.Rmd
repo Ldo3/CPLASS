@@ -7,4 +7,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+CPLASS (Continuous Piecewise-Linear Approximation via Stochastic Search) is a computational framework for detecting changes in velocity within multidimensional time-series data.
+Unlike conventional changepoint detection algorithms that focus on mean shifts, CPLASS identifies changes in slope (velocity) while enforcing continuity constraints across segments — making it particularly suited for complex, continuous processes such as intracellular transport dynamics.
+
+Authors: Linh Do, Scott A. McKinley, Keisha J. Cook.
