@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Home</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CPLASS</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Home</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-10-14
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CPLASS/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong9ba1bd4">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 9ba1bd4
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong9ba1bd4"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 9ba1bd4.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    data/.DS_Store
+
+Untracked files:
+    Untracked:  code/CPLASS.R
+    Untracked:  code/Fill_missing_data.R
+    Untracked:  code/PENALTY.R
+    Untracked:  code/csa_functions.R
+    Untracked:  code/msd_functions.R
+    Untracked:  code/plot_functions.R
+    Untracked:  data/20PFS_and_PFL/
+    Untracked:  data/sim13CKP/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
+(<code>docs/index.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+9ba1bd4
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-14
+</td>
+<td>
+wflow_publish(c("analysis/."))
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+b35ed00
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-14
+</td>
+<td>
+Start workflowr project.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>Welcome to my research website. This page contains latest code and
+data for CPLASS paper. CPLASS is an algorithm for detecting changes in
+velocity. Here we provide instruction on running CPLASS with examples
+and visualization tools.</p>
+<div id="for-details-we-refer-to-these-subpages" class="section level2">
+<h2>For details, we refer to these subpages</h2>
+<ul>
+<li></li>
+</ul>
+</div>
+<div id="cplass-functions" class="section level1">
+<h1>CPLASS functions</h1>
+<div id="for-a-single-path" class="section level3">
+<h3>For a single path</h3>
+<p><strong>Description</strong></p>
+<p>This function runs the Continuous Piecewise Linear Approximation with
+Stochastic Search (CPLASS) algorithm on a 2D data in the form of <span
+class="math inline">\((x_i,y_i)_{i=1}^n\)</span> observed at time <span
+class="math inline">\((t_i)_{i=1}^n\)</span> believed to follow a
+continuous piecewise linear regression model (Gaussian noise). It is
+used for detecting changes in velocity problem. CPLASS returns the time
+changes, the estimated parameters.</p>
+<p><strong>Usage</strong></p>
+<pre> CPLASS(t,x, y,time_rate, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+<p><strong>Arguments</strong></p>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>x</strong></td>
+<td>A vector containing the data sequence (Cargo locations in
+x-axis)</td>
+</tr>
+<tr class="even">
+<td><strong>y</strong></td>
+<td>A vector containing the data sequence (Cargo locations in
+y-axis)</td>
+</tr>
+<tr class="odd">
+<td><strong>t</strong></td>
+<td>A vector containing time</td>
+</tr>
+<tr class="even">
+<td><strong>time_rate</strong></td>
+<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
+</tr>
+<tr class="odd">
+<td><strong>lambda_r</strong></td>
+<td>the rate used in the proposal of a new vector of changepoints</td>
+</tr>
+<tr class="even">
+<td><strong>iter_max</strong></td>
+<td>The maximum number of iterations for running Metropolis-Hastings
+searching algorithm</td>
+</tr>
+<tr class="odd">
+<td><strong>burn_in</strong></td>
+<td>The number of burn-in steps in MH search algorithm</td>
+</tr>
+<tr class="even">
+<td><strong>s_cap</strong></td>
+<td>The threshold for the output speed. If the inferred speed exceed
+<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
+extra speed penalty will be introduced</td>
+</tr>
+<tr class="odd">
+<td><strong>gamma</strong></td>
+<td>The power in the strengthened Schwarz Information Criterion
+(sSIC)</td>
+</tr>
+<tr class="even">
+<td><strong>speed_pen</strong></td>
+<td>If <code>TRUE</code>, adding the speed penalty to the penalty
+function; if <code>FALSE</code>, we only use the linear penalty term
+sSIC</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output</strong></p>
+<p>A list of <code>segment_inferred</code> and
+<code>path_inferred</code> will be returned after running the
+algorithm.</p>
+<ul>
+<li>The <code>segment_inferred</code> is a tibble containing 8
+columns</li>
+</ul>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>cp_times</strong></td>
+<td>The inferred change times</td>
+</tr>
+<tr class="even">
+<td><strong>durations</strong></td>
+<td>The inferred segment durations</td>
+</tr>
+<tr class="odd">
+<td><strong>states</strong></td>
+<td>A binary vector labeling the state of the associated segments,
+<code>0</code> for stationary, <code>1</code> for motile. The labels are
+created using the cut-off method with a threshold of 100nm/s</td>
+</tr>
+<tr class="even">
+<td><strong>speeds</strong></td>
+<td>The inferred segment speeeds</td>
+</tr>
+<tr class="odd">
+<td><strong>vx</strong></td>
+<td>The inferred velocity with respect to x-axis</td>
+</tr>
+<tr class="even">
+<td><strong>vy</strong></td>
+<td>The inferred velocity with respect to y-axis</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The <code>path_inferred</code> is a tibble containing 6 columns</li>
+</ul>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>t</strong></td>
+<td>The input time</td>
+</tr>
+<tr class="even">
+<td><strong>j</strong></td>
+<td>The label of time points corresponding to the labels of segments
+after using the cut-off method</td>
+</tr>
+<tr class="odd">
+<td><strong>x</strong></td>
+<td>The observed data with respect to x-axis</td>
+</tr>
+<tr class="even">
+<td><strong>y</strong></td>
+<td>The observed data with respect to y-axis</td>
+</tr>
+<tr class="odd">
+<td><strong>a</strong></td>
+<td>The inferred piecewise linear lines (anchor locations w.r.t
+x-axis)</td>
+</tr>
+<tr class="even">
+<td><strong>b</strong></td>
+<td>The inferred piecewise linear lines (anchor locations w.r.t
+y-axis)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="for-a-collection-of-paths" class="section level3">
+<h3>For a collection of paths</h3>
+<p>For running CPLASS on a collection of paths, we introduced the
+function <code>CPLASS_paths</code>.</p>
+<p><strong>Usage</strong></p>
+<pre> CPLASS_paths(data, time_rate, PARALLEL = FALSE, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+<p><strong>Arguments</strong></p>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>data</strong></td>
+<td>A list of paths where for each path we can specify <span
+class="math inline">\(t,x,y\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>time_rate</strong></td>
+<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
+</tr>
+<tr class="odd">
+<td><strong>PARALLEL</strong></td>
+<td>If <code>TRUE</code>, running parallel computing; if
+<code>FALSE</code>, running sequentially</td>
+</tr>
+<tr class="even">
+<td><strong>lambda_r</strong></td>
+<td>the rate used in the proposal of a new vector of changepoints</td>
+</tr>
+<tr class="odd">
+<td><strong>iter_max</strong></td>
+<td>The maximum number of iterations for running Metropolis-Hastings
+searching algorithm</td>
+</tr>
+<tr class="even">
+<td><strong>burn_in</strong></td>
+<td>The number of burn-in steps in MH search algorithm</td>
+</tr>
+<tr class="odd">
+<td><strong>s_cap</strong></td>
+<td>The threshold for the output speed. If the inferred speed exceed
+<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
+extra speed penalty will be introduced</td>
+</tr>
+<tr class="even">
+<td><strong>gamma</strong></td>
+<td>The power in the strengthened Schwarz Information Criterion
+(sSIC)</td>
+</tr>
+<tr class="odd">
+<td><strong>speed_pen</strong></td>
+<td>If <code>TRUE</code>, adding the speed penalty to the penalty
+function; if <code>FALSE</code>, we only use the linear penalty term
+sSIC</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output</strong></p>
+<p>A list of paths, in each path, there is a similar output with two
+sublists <code>segments_inferred</code> and <code>path_inferred</code>
+as described in the <code>CPLASS</code> function.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
