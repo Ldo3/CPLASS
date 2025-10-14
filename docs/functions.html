@@ -11,7 +11,7 @@
 
 
 
-<title>Home</title>
+<title>Functions</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -273,7 +273,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Functions</h1>
 
 </div>
 
@@ -407,10 +407,11 @@ have uncommitted changes.
 <div id="versions" class="tab-pane fade">
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
-(<code>docs/index.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
+made to the R Markdown (<code>analysis/functions.Rmd</code>) and HTML
+(<code>docs/functions.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -451,57 +452,6 @@ Ldo3
 wflow_publish(c("analysis/."))
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-6825ed6
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-9ba1bd4
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-wflow_publish(c("analysis/."))
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-b35ed00
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -509,15 +459,246 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website. This page contains latest code and
-data for CPLASS paper. CPLASS is an algorithm for detecting changes in
-velocity. Here we provide instruction on running CPLASS with examples
-and visualization tools.</p>
-<div id="for-details-we-refer-to-these-subpages" class="section level2">
-<h2>For details, we refer to these subpages</h2>
+<div id="cplass-functions" class="section level1">
+<h1>CPLASS functions</h1>
+<div id="for-a-single-path" class="section level3">
+<h3>For a single path</h3>
+<p><strong>Description</strong></p>
+<p>This function runs the Continuous Piecewise Linear Approximation with
+Stochastic Search (CPLASS) algorithm on a 2D data in the form of <span
+class="math inline">\((x_i,y_i)_{i=1}^n\)</span> observed at time <span
+class="math inline">\((t_i)_{i=1}^n\)</span> believed to follow a
+continuous piecewise linear regression model (Gaussian noise). It is
+used for detecting changes in velocity problem. CPLASS returns the time
+changes, the estimated parameters.</p>
+<p><strong>Usage</strong></p>
+<pre> CPLASS(t,x, y,time_rate, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+<p><strong>Arguments</strong></p>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>x</strong></td>
+<td>A vector containing the data sequence (Cargo locations in
+x-axis)</td>
+</tr>
+<tr class="even">
+<td><strong>y</strong></td>
+<td>A vector containing the data sequence (Cargo locations in
+y-axis)</td>
+</tr>
+<tr class="odd">
+<td><strong>t</strong></td>
+<td>A vector containing time</td>
+</tr>
+<tr class="even">
+<td><strong>time_rate</strong></td>
+<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
+</tr>
+<tr class="odd">
+<td><strong>lambda_r</strong></td>
+<td>the rate used in the proposal of a new vector of changepoints</td>
+</tr>
+<tr class="even">
+<td><strong>iter_max</strong></td>
+<td>The maximum number of iterations for running Metropolis-Hastings
+searching algorithm</td>
+</tr>
+<tr class="odd">
+<td><strong>burn_in</strong></td>
+<td>The number of burn-in steps in MH search algorithm</td>
+</tr>
+<tr class="even">
+<td><strong>s_cap</strong></td>
+<td>The threshold for the output speed. If the inferred speed exceed
+<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
+extra speed penalty will be introduced</td>
+</tr>
+<tr class="odd">
+<td><strong>gamma</strong></td>
+<td>The power in the strengthened Schwarz Information Criterion
+(sSIC)</td>
+</tr>
+<tr class="even">
+<td><strong>speed_pen</strong></td>
+<td>If <code>TRUE</code>, adding the speed penalty to the penalty
+function; if <code>FALSE</code>, we only use the linear penalty term
+sSIC</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output</strong></p>
+<p>A list of <code>segment_inferred</code> and
+<code>path_inferred</code> will be returned after running the
+algorithm.</p>
 <ul>
-<li></li>
+<li>The <code>segment_inferred</code> is a tibble containing 8
+columns</li>
 </ul>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>cp_times</strong></td>
+<td>The inferred change times</td>
+</tr>
+<tr class="even">
+<td><strong>durations</strong></td>
+<td>The inferred segment durations</td>
+</tr>
+<tr class="odd">
+<td><strong>states</strong></td>
+<td>A binary vector labeling the state of the associated segments,
+<code>0</code> for stationary, <code>1</code> for motile. The labels are
+created using the cut-off method with a threshold of 100nm/s</td>
+</tr>
+<tr class="even">
+<td><strong>speeds</strong></td>
+<td>The inferred segment speeeds</td>
+</tr>
+<tr class="odd">
+<td><strong>vx</strong></td>
+<td>The inferred velocity with respect to x-axis</td>
+</tr>
+<tr class="even">
+<td><strong>vy</strong></td>
+<td>The inferred velocity with respect to y-axis</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The <code>path_inferred</code> is a tibble containing 6 columns</li>
+</ul>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>t</strong></td>
+<td>The input time</td>
+</tr>
+<tr class="even">
+<td><strong>j</strong></td>
+<td>The label of time points corresponding to the labels of segments
+after using the cut-off method</td>
+</tr>
+<tr class="odd">
+<td><strong>x</strong></td>
+<td>The observed data with respect to x-axis</td>
+</tr>
+<tr class="even">
+<td><strong>y</strong></td>
+<td>The observed data with respect to y-axis</td>
+</tr>
+<tr class="odd">
+<td><strong>a</strong></td>
+<td>The inferred piecewise linear lines (anchor locations w.r.t
+x-axis)</td>
+</tr>
+<tr class="even">
+<td><strong>b</strong></td>
+<td>The inferred piecewise linear lines (anchor locations w.r.t
+y-axis)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="for-a-collection-of-paths" class="section level3">
+<h3>For a collection of paths</h3>
+<p>For running CPLASS on a collection of paths, we introduced the
+function <code>CPLASS_paths</code>.</p>
+<p><strong>Usage</strong></p>
+<pre> CPLASS_paths(data, time_rate, PARALLEL = FALSE, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+<p><strong>Arguments</strong></p>
+<table>
+<colgroup>
+<col width="51%" />
+<col width="48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>data</strong></td>
+<td>A list of paths where for each path we can specify <span
+class="math inline">\(t,x,y\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>time_rate</strong></td>
+<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
+</tr>
+<tr class="odd">
+<td><strong>PARALLEL</strong></td>
+<td>If <code>TRUE</code>, running parallel computing; if
+<code>FALSE</code>, running sequentially</td>
+</tr>
+<tr class="even">
+<td><strong>lambda_r</strong></td>
+<td>the rate used in the proposal of a new vector of changepoints</td>
+</tr>
+<tr class="odd">
+<td><strong>iter_max</strong></td>
+<td>The maximum number of iterations for running Metropolis-Hastings
+searching algorithm</td>
+</tr>
+<tr class="even">
+<td><strong>burn_in</strong></td>
+<td>The number of burn-in steps in MH search algorithm</td>
+</tr>
+<tr class="odd">
+<td><strong>s_cap</strong></td>
+<td>The threshold for the output speed. If the inferred speed exceed
+<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
+extra speed penalty will be introduced</td>
+</tr>
+<tr class="even">
+<td><strong>gamma</strong></td>
+<td>The power in the strengthened Schwarz Information Criterion
+(sSIC)</td>
+</tr>
+<tr class="odd">
+<td><strong>speed_pen</strong></td>
+<td>If <code>TRUE</code>, adding the speed penalty to the penalty
+function; if <code>FALSE</code>, we only use the linear penalty term
+sSIC</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output</strong></p>
+<p>A list of paths, in each path, there is a similar output with two
+sublists <code>segments_inferred</code> and <code>path_inferred</code>
+as described in the <code>CPLASS</code> function.</p>
+</div>
 </div>
 </div>
 </div>
