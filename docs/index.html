@@ -281,7 +281,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -292,8 +292,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -306,9 +306,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CPLASS/</code> <span
@@ -331,31 +331,34 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong4a45b93">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongef81878">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 4a45b93
+aria-hidden="true"></span> <strong>Repository version:</strong> ef81878
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong4a45b93"
+<div id="strongRepositoryversionstrongef81878"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -364,7 +367,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 4a45b93.
+The results in this page were generated with repository version ef81878.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -383,6 +386,8 @@ Ignored files:
     Ignored:    data/.DS_Store
 
 Untracked files:
+    Untracked:  analysis/example_on_running CPLASS.Rmd
+    Untracked:  analysis/visualization_tools.Rmd
     Untracked:  code/CPLASS.R
     Untracked:  code/Fill_missing_data.R
     Untracked:  code/PENALTY.R
@@ -391,6 +396,9 @@ Untracked files:
     Untracked:  code/plot_functions.R
     Untracked:  data/20PFS_and_PFL/
     Untracked:  data/sim13CKP/
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -434,6 +442,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+ef81878
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -513,12 +538,13 @@ Start workflowr project.
 data for CPLASS paper. CPLASS is an algorithm for detecting changes in
 velocity. Here we provide instruction on running CPLASS with examples
 and visualization tools.</p>
-<div id="for-details-we-refer-to-these-subpages" class="section level2">
-<h2>For details, we refer to these subpages</h2>
+<p>For details, we refer to the following pages:</p>
 <ul>
-<li></li>
+<li><p><a href="example_on_running-CPLASS.html">Example on running
+CPLASS</a></p></li>
+<li><p><a href="visualization_tools.html">Visualization
+tools</a></p></li>
 </ul>
-</div>
 </div>
 </div>
 </div>

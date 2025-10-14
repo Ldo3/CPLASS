@@ -11,7 +11,8 @@ navbar:
     href: functions.html
 output:
   workflowr::wflow_html:
-    toc: yes
-    toc_float: yes
-    theme: cosmo
-    highlight: textmate
+    theme: flatly          # Clean, modern bootstrap theme
+    highlight: textmate    # Syntax highlighting for code
+    css: style.css         # Link to your custom stylesheet
+    toc: false
+    code_folding: hide     # Hide code by default (click to expand)
