@@ -1,0 +1,88 @@
+---
+title: "Functions"
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+# CPLASS functions
+
+### For a single path
+
+**Description**
+
+This function runs the Continuous Piecewise Linear Approximation with Stochastic Search (CPLASS) algorithm on a 2D data in the form of $(x_i,y_i)_{i=1}^n$ observed at time $(t_i)_{i=1}^n$ believed to follow a continuous piecewise linear regression model (Gaussian noise). It is used for detecting changes in velocity problem. CPLASS returns the time changes, the estimated parameters.
+
+**Usage**
+
+<pre> CPLASS(t,x, y,time_rate, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+
+**Arguments**
+
+| Argument     | Description |
+|--------------|-------------|
+| **x**        | A vector containing the data sequence (Cargo locations in x-axis) |
+| **y**        | A vector containing the data sequence (Cargo locations in y-axis) |
+| **t**        | A vector containing time |
+| **time_rate**        | Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1 |
+| **lambda_r** | the rate used in the proposal of a new vector of changepoints |
+| **iter_max** | The maximum number of iterations for running Metropolis-Hastings searching algorithm |
+| **burn_in**    | The number of burn-in steps in MH search algorithm|
+| **s_cap**    | The threshold for the output speed. If the inferred speed exceed `s_cap` and the `speed_pen` is activated, then the extra speed penalty will be introduced|
+| **gamma**      | The power in the strengthened Schwarz Information Criterion (sSIC) |
+| **speed_pen**  | If `TRUE`, adding the speed penalty to the penalty function; if `FALSE`, we only use the linear penalty term sSIC |
+
+**Output**
+
+A list of `segment_inferred` and `path_inferred` will be returned after running the algorithm. 
+
+- The `segment_inferred` is a tibble containing 8 columns 
+
+| Columns     | Description |
+|--------------|-------------|
+| **cp_times** | The inferred change times |
+| **durations**| The inferred segment durations |
+| **states**   | A binary vector labeling the state of the associated segments, `0` for stationary, `1` for motile. The labels are created using the cut-off method with a threshold of 100nm/s |
+| **speeds**   | The inferred segment speeeds |
+| **vx** | The inferred velocity with respect to x-axis |
+| **vy** | The inferred velocity with respect to y-axis|
+
+- The `path_inferred` is a tibble containing 6 columns
+
+| Columns     | Description |
+|--------------|-------------|
+| **t** | The input time |
+| **j**| The label of time points corresponding to the labels of segments after using the cut-off method |
+| **x**   |The observed data with respect to x-axis  |
+| **y**   | The observed data with respect to y-axis |
+| **a** | The inferred piecewise linear lines (anchor locations w.r.t x-axis) |
+| **b** | The inferred piecewise linear lines (anchor locations w.r.t y-axis)|
+
+### For a collection of paths
+
+For running CPLASS on a collection of paths, we introduced the function `CPLASS_paths`.
+
+**Usage**
+
+<pre> CPLASS_paths(data, time_rate, PARALLEL = FALSE, lambda_r=1/30, iter_max = 5000, burn_in=500, s_cap=1, gamma=1.2, speed_pen=TRUE) </pre>
+
+**Arguments**
+
+| Argument     | Description |
+|--------------|-------------|
+| **data**     | A list of paths where for each path we can specify $t,x,y$ |
+| **time_rate**| Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1 |
+| **PARALLEL** | If `TRUE`, running parallel computing; if `FALSE`, running sequentially
+| **lambda_r** | the rate used in the proposal of a new vector of changepoints |
+| **iter_max** | The maximum number of iterations for running Metropolis-Hastings searching algorithm |
+| **burn_in**    | The number of burn-in steps in MH search algorithm|
+| **s_cap**    | The threshold for the output speed. If the inferred speed exceed `s_cap` and the `speed_pen` is activated, then the extra speed penalty will be introduced|
+| **gamma**      | The power in the strengthened Schwarz Information Criterion (sSIC) |
+| **speed_pen**  | If `TRUE`, adding the speed penalty to the penalty function; if `FALSE`, we only use the linear penalty term sSIC |
+
+**Output**
+
+A list of paths, in each path, there is a similar output with two sublists `segments_inferred` and `path_inferred` as described in the `CPLASS` function.
+

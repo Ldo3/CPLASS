@@ -7,6 +7,8 @@ navbar:
     href: index.html
   - text: About
     href: about.html
+  - text: Functions
+    href: functions.html
 output:
   workflowr::wflow_html:
     toc: yes
