@@ -2,6 +2,8 @@
 title: "Functions"
 output:
   workflowr::wflow_html:
+    theme: flatly
+    css: static/style.css
     toc: false
 editor_options:
   chunk_output_type: console
