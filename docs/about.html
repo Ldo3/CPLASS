@@ -33,6 +33,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -268,7 +270,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/Ldo3/CPLASS">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -294,7 +302,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -305,8 +313,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -315,13 +323,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-10-14
+<strong>Last updated:</strong> 2025-10-15
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>CPLASS/</code> <span
@@ -344,31 +352,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong5f97658">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLdo3CPLASStree2c271de9b2dc974dc35ee9928ffecbd023cbc87ctargetblank2c271dea">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 5f97658
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/Ldo3/CPLASS/tree/2c271de9b2dc974dc35ee9928ffecbd023cbc87c" target="_blank">2c271de</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong5f97658"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomLdo3CPLASStree2c271de9b2dc974dc35ee9928ffecbd023cbc87ctargetblank2c271dea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -377,7 +390,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 5f97658.
+The results in this page were generated with repository version
+<a href="https://github.com/Ldo3/CPLASS/tree/2c271de9b2dc974dc35ee9928ffecbd023cbc87c" target="_blank">2c271de</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -395,18 +409,10 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    data/.DS_Store
 
-Untracked files:
-    Untracked:  analysis/example_on_running-CPLASS.Rmd
-    Untracked:  analysis/visualization_tools.Rmd
-    Untracked:  code/CPLASS.R
-    Untracked:  code/Fill_missing_data.R
-    Untracked:  code/PENALTY.R
-    Untracked:  code/csa_functions.R
-    Untracked:  code/msd_functions.R
-    Untracked:  code/plot_functions.R
-    Untracked:  data/20PFS_and_PFL/
-    Untracked:  data/sim13CKP/
-    Untracked:  style.css
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/about.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -452,44 +458,10 @@ Message
 <tbody>
 <tr>
 <td>
-Rmd
-</td>
-<td>
-5f97658
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Add custom CSS
-</td>
-</tr>
-<tr>
-<td>
 html
 </td>
 <td>
-5f97658
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Add custom CSS
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-6825ed6
+<a href="https://rawcdn.githack.com/Ldo3/CPLASS/442169ce79cfa1e5a28871a45654894287dbe538/docs/about.html" target="_blank">442169c</a>
 </td>
 <td>
 Ldo3
@@ -506,7 +478,58 @@ Build site.
 Rmd
 </td>
 <td>
-9ba1bd4
+<a href="https://github.com/Ldo3/CPLASS/blob/5f97658a86c95a39ba938a90521f59ccd4dd2b2d/analysis/about.Rmd" target="_blank">5f97658</a>
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-14
+</td>
+<td>
+Add custom CSS
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Ldo3/CPLASS/5f97658a86c95a39ba938a90521f59ccd4dd2b2d/docs/about.html" target="_blank">5f97658</a>
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-14
+</td>
+<td>
+Add custom CSS
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Ldo3/CPLASS/6825ed6d96c42622837eb3a21e663da4f0757282/docs/about.html" target="_blank">6825ed6</a>
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Ldo3/CPLASS/blob/9ba1bd450770ed6cdaab562951da8ef598c38646/analysis/about.Rmd" target="_blank">9ba1bd4</a>
 </td>
 <td>
 Ldo3
@@ -523,7 +546,7 @@ wflow_publish(c("analysis/."))
 Rmd
 </td>
 <td>
-b35ed00
+<a href="https://github.com/Ldo3/CPLASS/blob/b35ed0031f0711121868c1ef42209d1f065f2e87/analysis/about.Rmd" target="_blank">b35ed00</a>
 </td>
 <td>
 Ldo3
@@ -605,7 +628,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
+  window.initializeCodeFolding("show" === "show");
 });
 </script>
 

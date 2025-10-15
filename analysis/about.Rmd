@@ -1,10 +1,12 @@
 ---
 title: "About"
+site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
     theme: flatly
     css: static/style.css
-    toc: false
+    toc: true
+    code_folding: show
 editor_options:
   chunk_output_type: console
 ---
