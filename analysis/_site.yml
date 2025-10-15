@@ -1,7 +1,7 @@
-name: "CPLASS"
+name: CPLASS
 output_dir: ../docs
 navbar:
-  title: "CPLASS"
+  title: CPLASS
   left:
   - text: Home
     href: index.html
@@ -9,10 +9,14 @@ navbar:
     href: about.html
   - text: Functions
     href: functions.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/Ldo3/CPLASS
 output:
   workflowr::wflow_html:
-    theme: flatly          # Clean, modern bootstrap theme
-    highlight: textmate    # Syntax highlighting for code
-    css: style.css         # Link to your custom stylesheet
-    toc: false
-    code_folding: hide     # Hide code by default (click to expand)
+    theme: flatly
+    highlight: textmate
+    css: style.css
+    toc: no
+    code_folding: hide
