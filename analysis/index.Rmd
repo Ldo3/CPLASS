@@ -8,9 +8,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website. This page contains latest code and data for CPLASS paper. CPLASS is an algorithm for detecting changes in velocity. Here we provide instruction on running CPLASS with examples and visualization tools.
+Welcome to my research website. This page contains the latest code and data for the CPLASS paper. CPLASS is an algorithm for detecting changes in velocity. Here, we provide instructions on running CPLASS with examples and visualization tools.
 
-For details, we refer to the following pages:
+For the `CPLASS` online running, please click here [CPLASS-online](https://stochastics-lab.shinyapps.io/changepoint/). For offline running with more control, we provide the following examples and instructions:
 
 + [Example on running CPLASS](example_on_running-CPLASS.html)
 

@@ -1,0 +1,190 @@
+---
+title: "Example on running CPLASS"
+author:
+  - "Linh Do"
+  - "Scott A. McKinley"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    theme: flatly
+    css: static/style.css
+    toc: true
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+---
+
+In this page, we provided example on running CPLASS for a single path or a collection of paths.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Loading the library and source codes
+
+Firstly, let's load all needed library and source codes of CPLASS
+
+```{r loading source codes and library, message=FALSE, warning=FALSE}
+library("Rlab")
+library("matrixcalc")
+library("pracma")
+library("limSolve")
+library("tidyverse")
+library("ggplot2")
+library("patchwork")
+library("foreach")
+library("doParallel")
+library("glmnet")
+library("earth")
+library(ggthemes)
+library(readr)
+source("code/CPLASS.R")
+source("code/plot_functions.R")
+source("code/csa_functions.R")
+source("code/PENALTY.R")
+```
+
+
+# 2. Running CPLASS 
+
+CPLASS requires trajectory data that include observed time points and 2-D spatial coordinates (x- and y-positions).
+Each observation corresponds to the position of a tracked particle at a given time.
+ 
+## Example Dataset
+
+The dataset provided here contains lysosome trajectories collected in the peripheral regions of cells by Payne’s Lab.
+These data represent the movement of intracellular cargos (lysosomes) driven by molecular motors, which undergo intermittent transitions between transport states.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(knitr)
+library(kableExtra)
+
+table_info <- data.frame(
+  Column = c("t", "x", "y"),
+  Description = c(
+    "Observed time (in seconds or frame number)",
+    "X-position of the particle",
+    "Y-position of the particle"
+  )
+)
+
+kable(table_info, "html", caption = "Lysosome trajectory data columns") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
+```
+
+
+```{r load data, message=FALSE, warning=FALSE}
+data = read_csv("data/Real_21_Periphery.csv") #load your data here
+```
+
+In the following, let's CPLASS for a single path and plot the trajectory.
+
+## CPLASS
+
+See [CPLASS](functions.html#cplass) for full details
+
+```{r running CPLASS,message=FALSE, warning=FALSE, results='hide' }
+# Step 1: what does your path look like?
+path = data %>% filter(index_path == 1)
+t = path$t
+x = path$x
+y = path$y
+time_rate = min(diff(t))
+
+# Step 2: running CPLASS
+cplass = CPLASS(t,x,y,time_rate,iter_max = 2000) #notice that I am using the default but you can change any argument to adjust the MCMC steps, burn-in steps, speed limit threshold, turn-on or turn off the speed penalty, and so on
+
+# Step 3: save the output as .rds file
+saveRDS(cplass,file="output/Example_path_1_Periphery.rds")
+
+```
+
+**Visualize the results**
+
+```{r visualize the output path from CPLASS, warning =FALSE}
+i=1
+motor = "Perinuclear Lysosome" #enter the name you want to display in the figure
+speed_max = c()
+speed_max = c(speed_max,max(cplass$segments_inferred$speeds))
+max_speed = ceiling(max(speed_max))
+plot_path_inferred(cplass,motor = motor,max_speed = max_speed,t_lim = c(0,30))
+```
+
+
+The black line denotes the trajectory in the x-y coordinate plane and the time series for each coordinate. The blue line in each figure represents the inferred anchor position. Each green panel denotes a Motile segment, and each pink panel denotes a Stationary segment. Here, we used a threshold of $0.1\mu$m/s to label a segment as stationary/motile.
+
+## CPLASS_paths
+
+
+```r
+# We will run on the 21PF data set with 3 paths.
+subdata = data%>%filter(index_path%in%c(1,2,3)) #contains 3 paths
+cplass_path = list()
+for (i in 1:3)
+{
+     path = subdata %>% filter(index_path == i)
+     t = path$t
+     x = path$x
+     y = path$y
+     time_rate = min(diff(t))
+     cplass_path[[i]] = CPLASS(t,x,y,time_rate,iter_max = 2000)
+}
+saveRDS(cplass_path,file="output/Example_3_paths_Periphery.rds")
+```
+
+
+
+**Visualization**
+
+Since we have a lot of paths here, it is better to save the plots into a pdf file to see them all together. The follow code will help us to do so. The output looks like this [Real21PF_gallery](output/Real21PF_gallery.pdf).
+
+```r
+path_list = cplass_path
+
+
+file_list = c("21PF")
+filestub = paste0("output/Real",file_list[1])
+outfile = paste0(filestub,"_gallery.pdf")
+
+ 
+motor = "Perinuclear Lysosomes" #change the name to the name of your data
+
+pdf_output = TRUE
+
+if (pdf_output == TRUE){
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste("Working on path",i))
+  }
+  
+ 
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed)
+  print(dashboard)
+
+  
+}
+
+if (pdf_output == TRUE){
+  dev.off()
+}
+```
+

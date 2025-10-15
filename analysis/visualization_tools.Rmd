@@ -1,0 +1,457 @@
+---
+title: "Visualization tools"
+author:
+  - "Linh Do"
+  - "Keisha J. Cook"
+  - "Scott A. McKinley"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    theme: flatly
+    css: static/style.css
+    toc: true
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this pages, there are examples on how to plot paths and use Cumulative Speed Allocation (CSA) tool to compare between populations. For more details on CSA, we refer to the paper [Cook, Rayens, Do, Payne and McKinley (2025) ](https://www.aimspress.com/article/doi/10.3934/mbe.2025095?viewType=HTML#b52).
+
+We provide plot functions for visualizing trajectories (please click to the function for more details) including:
+
+| Plot functions     | Description |
+|--------------|-------------|
+| [**plot_path_inferred()**](functions.html#plot_path_inferred)| Plot the segmented trajectories after running CPLASS  |
+| [**plot_path_actual_and_inferred()**](functions.html#plot_path_actual_and_inferred) | Plot the actual overlap the inferred trajectories (for simulation data where we have the ground truth) |
+| [**plot_csa()**](functions.html#plot_csa)   | Plot Cummulative Speed Allocations |
+
+
+In this instructions, we continue using the `lysosome transport` in the Periphery region of cells from Payne's lab. Please find the details on data collection here [Rayens, Cook, McKinley, and Payne](https://pubmed.ncbi.nlm.nih.gov/35202608/).
+
+```{r load data and functions, message=FALSE, warning=FALSE}
+paths = readRDS("data/21PF/CPLASS_21PF_250_paths_sSIC_with_speed_pen.rds") #load your data here
+
+source("code/plot_functions.R")
+source("code/csa_functions.R")
+library("tidyverse")
+library("ggplot2")
+library("patchwork")
+```
+
+## plot_path_inferred
+
+### Plot a single path
+
+```{r plot specific paths}
+
+path_index = c(49)
+# # If you want to select a certain path, use these lines
+path_list = list(paths[[path_index]])
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor ="Periphery" #change the name for your data
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste("Working on path",i))
+  }
+  
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed, title_ind = path_index, show_time_changes = TRUE)
+  
+  print(dashboard)
+  
+}
+
+
+```
+
+### Plot all paths and create a gallery
+
+The following code will help to save all of paths into a .pdf gallery. The output looks like this [Periphery_gallery](output/Periphery_gallery.pdf).
+
+```r 
+pdf_output = TRUE
+path_list = paths
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor ="Periphery"
+
+if (pdf_output == TRUE){
+ 
+  outfile = paste0("output/",motor,"_gallery.pdf")
+  
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste("Working on path",i))
+  }
+  
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed)
+  
+  print(dashboard)
+  
+}
+if (pdf_output == TRUE){
+  dev.off()
+}
+
+
+```
+
+
+
+
+
+
+## plot_path_actual_and_inferred
+
+This function is useful for evaluation the performance of CPLASS inferred trajectories on the simulation data sets. 
+
+### Plot a single path
+
+```{r}
+paths = readRDS("data/sim13CKP/Sim13_CKP_25Hz_cplass_with_speed_theory.rds")
+path_index = c(15)
+# # If you want to select a certain path, use these lines
+path_list = list(paths[[path_index]])
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor ="Simulation: Base" #change the name for your data
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste("Working on path",i))
+  }
+  
+  dashboard = plot_path_actual_and_inferred(path_list[[i]],xy_width,t_lim)
+  
+  print(dashboard)
+  
+}
+
+
+```
+
+### Plot all paths and create a gallery
+
+The following code will help to save all of paths into a .pdf gallery. The output looks like this [Simulated_base_gallery](output/CKP13_gallery.pdf).
+
+```r 
+pdf_output = TRUE
+path_list = paths
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor ="CKP13"
+
+if (pdf_output == TRUE){
+ 
+  outfile = paste0("docs/output/",motor,"_gallery.pdf")
+  
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste("Working on path",i))
+  }
+  
+  dashboard = plot_path_actual_and_inferred(path_list[[i]],xy_width,t_lim)
+  
+  print(dashboard)
+  
+}
+if (pdf_output == TRUE){
+  dev.off()
+}
+
+
+```
+
+
+
+
+
+
+## plot_csa
+
+The following is the code to reproduce the Figure 8 in CPLASS paper (will be available soon) where we create CSA plots one for comparing lysosomal transport in perinuclear and periphery regions and one for comparing the sucrose-treated groups restricted to the periphery rgion of the cell. Please see [Rayens, Cook, McKinley, and Payne](https://pubmed.ncbi.nlm.nih.gov/35202608/) for more details on the data, and [Cook, Rayens, **Do**, Payne , McKinley](https://www.aimspress.com/article/doi/10.3934/mbe.2025095) for the calculation of CSA. 
+
+```{r FIGURE: CSA Compare 1}
+pdf_output = TRUE
+folder_name = c("data/21PF/", "data/20PFS_and_PFL/")
+real_data_file1 = paste0(folder_name[1],"CPLASS_21PN_250_paths_sSIC_with_speed_pen.rds")
+real_data_file2 = paste0(folder_name[1],"CPLASS_21PF_250_paths_sSIC_with_speed_pen.rds")
+
+real_path_list1 = readRDS(real_data_file1)
+real_path_list2 = readRDS(real_data_file2)
+
+
+cohort_list = c("Control Perinuclear", 
+                "Control Periphery")
+color_list = c("Control Perinuclear" = "#1B9E77", 
+               "Control Periphery" ="#377EB8") 
+
+pdf_output = TRUE
+
+##### Create Segment Summary ####
+segment_summary = summarize_segments_inferred(real_path_list1,cohort_list[1])
+segment_summary = bind_rows(segment_summary, 
+summarize_segments_inferred(real_path_list2,cohort_list[2]))
+
+max_speed = min(1.2,max(segment_summary$speeds))
+
+# Assumes theta is the same for all frame rates involved
+speed_mesh = seq(0,max_speed,length = 200)
+ds = speed_mesh[2] - speed_mesh[1]
+subsample_size = 200
+num_subsamples = 30
+
+csa1 = tibble()
+
+#### Bootstrap CSA for Real Data 1 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list1),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list1[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,"Sample")
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa1 = bind_rows(csa1,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[1],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+csa2 = tibble()
+#### Bootstrap CSA for Real Data 2 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list2),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list2[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,"Sample")
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa2 = bind_rows(csa2,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[2],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+
+csa_both = bind_rows(csa1,csa2)
+
+csa_both = csa_both %>% mutate(cohort = paste(label,subsample))
+
+p_csa_compare1 = ggplot(csa_both %>% filter(label == cohort_list[1] | 
+                                      label == cohort_list[2]))+
+  geom_line(aes(x = s, y = csa, col = label, group = cohort))+
+  # ggtitle("Lysosome Periphery Large vs Small")+
+  ylab("Cumulative Speed Allocation")+xlab(expression(paste("Speed (",mu,"m/sec)")))+
+  scale_color_manual(values = color_list)+
+  theme_minimal()+
+     theme(
+    legend.position = c(0.8, 0.2),  # Adjust position inside the plot
+    legend.background = element_rect(fill = "white", color = "black")
+  )+labs(color = NULL)
+print(p_csa_compare1)
+
+```
+
+
+
+```{r FIGURE: CSA Compare 2}
+pdf_output = TRUE
+real_data_file1 = paste0(folder_name[2],"CPLASS_20PFL_250_paths_sSIC_with_speed_pen.rds")
+real_data_file2 = paste0(folder_name[2],"CPLASS_20PFS_250_paths_sSIC_with_speed_pen.rds")
+
+real_path_list1 = readRDS(real_data_file1)
+real_path_list2 = readRDS(real_data_file2)
+
+cohort_list = c("Sucrose Large", 
+                "Sucrose Small")
+color_list = c("Sucrose Large" = "#1B9E77", 
+               "Sucrose Small" ="#377EB8") 
+
+pdf_output = TRUE
+
+
+##### Create Segment Summary ####
+segment_summary = summarize_segments_inferred(real_path_list1,cohort_list[1])
+segment_summary = bind_rows(segment_summary,
+                            summarize_segments_inferred(real_path_list2,cohort_list[2]))
+
+
+max_speed = min(1.2,max(segment_summary$speeds))
+
+# Assumes theta is the same for all frame rates involved
+speed_mesh = seq(0,max_speed,length = 200)
+ds = speed_mesh[2] - speed_mesh[1]
+subsample_size = 200
+num_subsamples = 30
+
+csa1 = tibble()
+#### Bootstrap CSA for Real Data 1 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list1),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list1[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,"Sample")
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa1 = bind_rows(csa1,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[1],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+csa2 = tibble()
+#### Bootstrap CSA for Real Data 2 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list2),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list2[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,"Sample")
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa2 = bind_rows(csa2,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[2],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+csa_both = bind_rows(csa1,csa2)
+csa_both = csa_both %>% mutate(cohort = paste(label,subsample))
+
+p_csa_compare2 = ggplot(csa_both %>% filter(label == cohort_list[1] | 
+                                      label == cohort_list[2]))+
+  geom_line(aes(x = s, y = csa, col = label, group = cohort))+
+  # ggtitle("Lysosome Periphery Large vs Small")+
+  ylab("Cumulative Speed Allocation")+xlab(expression(paste("Speed (",mu,"m/sec)")))+
+  scale_color_manual(values = color_list)+
+  theme_minimal()+
+     theme(
+    legend.position = c(0.85, 0.2),  # Adjust position inside the plot
+    legend.background = element_rect(fill = "white", color = "black")
+  )+labs(color = NULL)
+print(p_csa_compare2)
+
+
+p_csa_full = (p_csa_compare1 + p_csa_compare2)
+
+if (pdf_output == TRUE){
+  outfile = paste0("docs/output/Figure_CSA_compare_PN_PF_PFL_PFS.pdf")
+  pdf(outfile,onefile = TRUE,width=9.5,height=3)
+}
+
+print(p_csa_full)
+
+if (pdf_output == TRUE){
+  dev.off()
+}
+```
