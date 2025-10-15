@@ -1,18 +1,20 @@
 name: CPLASS
 output_dir: ../docs
+
 navbar:
-  title: CPLASS
+  title: "CPLASS"
   left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: Functions
-    href: functions.html
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Functions"
+      href: functions.html
   right:
-  - icon: fab fa-github
-    text: Source code
-    href: https://github.com/Ldo3/CPLASS
+    - icon: fa-github
+      href: https://github.com/Ldo3/CPLASS
+      text: "Source code"
+
 output:
   workflowr::wflow_html:
     theme: flatly
