@@ -7,4 +7,4 @@ Authors: Linh Do, Scott A. McKinley, Keisha J. Cook.
 
 For the `CPLASS` online running, please click here [CPLASS-online](https://stochastics-lab.shinyapps.io/changepoint/). 
 
-For offline running with more control, we provide the examples and instructions here [CPLASS]()
+For offline running with more control, we provide the examples and instructions here [CPLASS](https://ldo3.github.io/CPLASS/)
