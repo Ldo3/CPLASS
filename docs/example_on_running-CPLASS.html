@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Linh Do" />
+<meta name="author" content="Scott A. McKinley" />
 
 
-<title>Functions</title>
+<title>Example on running CPLASS</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -33,6 +35,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -286,7 +290,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Functions</h1>
+<h1 class="title toc-ignore">Example on running CPLASS</h1>
+<h4 class="author">Linh Do</h4>
+<h4 class="author">Scott A. McKinley</h4>
 
 </div>
 
@@ -515,11 +521,12 @@ have uncommitted changes.
 <div id="versions" class="tab-pane fade">
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/functions.Rmd</code>) and HTML
-(<code>docs/functions.html</code>) files. If you’ve configured a remote
-Git repository (see <code>?wflow_git_remote</code>), click on the
-hyperlinks in the table below to view the files as they were in that
-past version.
+made to the R Markdown
+(<code>analysis/example_on_running-CPLASS.Rmd</code>) and HTML
+(<code>docs/example_on_running-CPLASS.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -560,91 +567,6 @@ Ldo3
 wflow_publish(c("analysis/."))
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-442169c
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-5f97658
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Add custom CSS
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-5f97658
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Add custom CSS
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-ef81878
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-4a45b93
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-wflow_publish(c("analysis/."))
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -652,459 +574,183 @@ wflow_publish(c("analysis/."))
 </div>
 </div>
 </div>
-<p>All functions that used in this projects</p>
-<ul>
-<li><p><a
-href="functions.html#cplass"><strong>CPLASS()</strong></a></p></li>
-<li><p><a
-href="functions.html#cplass_paths"><strong>CPLASS_paths()</strong></a></p></li>
-<li><p><a
-href="functions.html#plot_path_inferred"><strong>plot_path_inferred()</strong></a></p></li>
-<li><p><a
-href="functions.html#plot_path_actual_and_inferred"><strong>plot_path_actual_and_inferred()</strong></a></p></li>
-<li><p><a
-href="functions.html#plot_csa"><strong>plot_csa()</strong></a></p></li>
-</ul>
+<p>In this page, we provided example on running CPLASS for a single path
+or a collection of paths.</p>
+<div id="loading-the-library-and-source-codes" class="section level1">
+<h1>1. Loading the library and source codes</h1>
+<p>Firstly, let’s load all needed library and source codes of CPLASS</p>
+<pre class="r"><code>library(&quot;Rlab&quot;)
+library(&quot;matrixcalc&quot;)
+library(&quot;pracma&quot;)
+library(&quot;limSolve&quot;)
+library(&quot;tidyverse&quot;)
+library(&quot;ggplot2&quot;)
+library(&quot;patchwork&quot;)
+library(&quot;foreach&quot;)
+library(&quot;doParallel&quot;)
+library(&quot;glmnet&quot;)
+library(&quot;earth&quot;)
+library(ggthemes)
+library(readr)
+source(&quot;code/CPLASS.R&quot;)
+source(&quot;code/plot_functions.R&quot;)
+source(&quot;code/csa_functions.R&quot;)
+source(&quot;code/PENALTY.R&quot;)</code></pre>
+</div>
+<div id="running-cplass" class="section level1">
+<h1>2. Running CPLASS</h1>
+<p>CPLASS requires trajectory data that include observed time points and
+2-D spatial coordinates (x- and y-positions). Each observation
+corresponds to the position of a tracked particle at a given time.</p>
+<div id="example-dataset" class="section level2">
+<h2>Example Dataset</h2>
+<p>The dataset provided here contains lysosome trajectories collected in
+the peripheral regions of cells by Payne’s Lab. These data represent the
+movement of intracellular cargos (lysosomes) driven by molecular motors,
+which undergo intermittent transitions between transport states.</p>
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Lysosome trajectory data columns
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Column
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+t
+</td>
+<td style="text-align:left;">
+Observed time (in seconds or frame number)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+x
+</td>
+<td style="text-align:left;">
+X-position of the particle
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+y
+</td>
+<td style="text-align:left;">
+Y-position of the particle
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data = read_csv(&quot;data/Real_21_Periphery.csv&quot;) #load your data here</code></pre>
+<p>In the following, let’s CPLASS for a single path and plot the
+trajectory.</p>
+</div>
 <div id="cplass" class="section level2">
 <h2>CPLASS</h2>
-<p><strong>Description</strong></p>
-<p>This function runs the Continuous Piecewise Linear Approximation with
-Stochastic Search (CPLASS) algorithm on a 2D data in the form of <span
-class="math inline">\((x_i,y_i)_{i=1}^n\)</span> observed at time <span
-class="math inline">\((t_i)_{i=1}^n\)</span> believed to follow a
-continuous piecewise linear regression model (Gaussian noise). It is
-used for detecting changes in velocity problem. CPLASS returns the time
-changes, the estimated parameters.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code> CPLASS(t,x, y,time_rate, lambda_r=1/30, 
-                  iter_max = 5000, burn_in=500, s_cap=1, 
-                  gamma=1.01, speed_pen=TRUE, Diagnostic = FALSE, 
-                  sd = NA, pen = &quot;ssic&quot;) </code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>x</strong></td>
-<td>A vector containing the data sequence (Cargo locations in
-x-axis)</td>
-</tr>
-<tr class="even">
-<td><strong>y</strong></td>
-<td>A vector containing the data sequence (Cargo locations in
-y-axis)</td>
-</tr>
-<tr class="odd">
-<td><strong>t</strong></td>
-<td>A vector containing time</td>
-</tr>
-<tr class="even">
-<td><strong>time_rate</strong></td>
-<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
-</tr>
-<tr class="odd">
-<td><strong>lambda_r</strong></td>
-<td>the rate used in the proposal of a new vector of changepoints</td>
-</tr>
-<tr class="even">
-<td><strong>iter_max</strong></td>
-<td>The maximum number of iterations for running Metropolis-Hastings
-searching algorithm</td>
-</tr>
-<tr class="odd">
-<td><strong>burn_in</strong></td>
-<td>The number of burn-in steps in MH search algorithm</td>
-</tr>
-<tr class="even">
-<td><strong>s_cap</strong></td>
-<td>The threshold for the output speed. If the inferred speed exceed
-<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
-extra speed penalty will be introduced</td>
-</tr>
-<tr class="odd">
-<td><strong>gamma</strong></td>
-<td>The power in the strengthened Schwarz Information Criterion
-(sSIC)</td>
-</tr>
-<tr class="even">
-<td><strong>speed_pen</strong></td>
-<td>If <code>TRUE</code>, adding the speed penalty to the penalty
-function; if <code>FALSE</code>, we only use the linear penalty term
-sSIC</td>
-</tr>
-<tr class="odd">
-<td><strong>Diagnostic</strong></td>
-<td>If <code>TRUE</code>, a dataframe with all of update in the
-stochastic search will be printed</td>
-</tr>
-<tr class="even">
-<td><strong>sd</strong></td>
-<td>The standard deviation value of the noise of the data. If it is
-unknown, then CPLASS will estimate it.</td>
-</tr>
-<tr class="odd">
-<td><strong>pen</strong></td>
-<td>Either <code>aicc</code> or <code>ssic</code>. The options to choose
-the information criterion. <code>aicc</code> for the Corrected Akaike
-Information Criterion, <code>ssic</code> for the strengthened Schwarz
-Information Criterion.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A list of <code>segment_inferred</code> and
-<code>path_inferred</code> will be returned after running the
-algorithm.</p>
-<ul>
-<li>The <code>segment_inferred</code> is a tibble containing 8
-columns</li>
-</ul>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Columns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>cp_times</strong></td>
-<td>The inferred change times</td>
-</tr>
-<tr class="even">
-<td><strong>durations</strong></td>
-<td>The inferred segment durations</td>
-</tr>
-<tr class="odd">
-<td><strong>states</strong></td>
-<td>A binary vector labeling the state of the associated segments,
-<code>0</code> for stationary, <code>1</code> for motile. The labels are
-created using the cut-off method with a threshold of 100nm/s</td>
-</tr>
-<tr class="even">
-<td><strong>speeds</strong></td>
-<td>The inferred segment speeeds</td>
-</tr>
-<tr class="odd">
-<td><strong>vx</strong></td>
-<td>The inferred velocity with respect to x-axis</td>
-</tr>
-<tr class="even">
-<td><strong>vy</strong></td>
-<td>The inferred velocity with respect to y-axis</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>The <code>path_inferred</code> is a tibble containing 6 columns</li>
-</ul>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Columns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>t</strong></td>
-<td>The input time</td>
-</tr>
-<tr class="even">
-<td><strong>j</strong></td>
-<td>The label of time points corresponding to the labels of segments
-after using the cut-off method</td>
-</tr>
-<tr class="odd">
-<td><strong>x</strong></td>
-<td>The observed data with respect to x-axis</td>
-</tr>
-<tr class="even">
-<td><strong>y</strong></td>
-<td>The observed data with respect to y-axis</td>
-</tr>
-<tr class="odd">
-<td><strong>a</strong></td>
-<td>The inferred piecewise linear lines (anchor locations w.r.t
-x-axis)</td>
-</tr>
-<tr class="even">
-<td><strong>b</strong></td>
-<td>The inferred piecewise linear lines (anchor locations w.r.t
-y-axis)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Example</strong></p>
-<p><a href="example_on_running-CPLASS.html#cplass">← CPLASS
-Analysis</a></p>
+<p>See <a href="functions.html#cplass">CPLASS</a> for full details</p>
+<pre class="r"><code># Step 1: what does your path look like?
+path = data %&gt;% filter(index_path == 1)
+t = path$t
+x = path$x
+y = path$y
+time_rate = min(diff(t))
+
+# Step 2: running CPLASS
+cplass = CPLASS(t,x,y,time_rate,iter_max = 2000) #notice that I am using the default but you can change any argument to adjust the MCMC steps, burn-in steps, speed limit threshold, turn-on or turn off the speed penalty, and so on
+
+# Step 3: save the output as .rds file
+saveRDS(cplass,file=&quot;output/Example_path_1_Periphery.rds&quot;)</code></pre>
+<p><strong>Visualize the results</strong></p>
+<pre class="r"><code>i=1
+motor = &quot;Perinuclear Lysosome&quot; #enter the name you want to display in the figure
+speed_max = c()
+speed_max = c(speed_max,max(cplass$segments_inferred$speeds))
+max_speed = ceiling(max(speed_max))
+plot_path_inferred(cplass,motor = motor,max_speed = max_speed,t_lim = c(0,30))</code></pre>
+<p><img src="figure/example_on_running-CPLASS.Rmd/visualize%20the%20output%20path%20from%20CPLASS-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The black line denotes the trajectory in the x-y coordinate plane and
+the time series for each coordinate. The blue line in each figure
+represents the inferred anchor position. Each green panel denotes a
+Motile segment, and each pink panel denotes a Stationary segment. Here,
+we used a threshold of <span class="math inline">\(0.1\mu\)</span>m/s to
+label a segment as stationary/motile.</p>
 </div>
 <div id="cplass_paths" class="section level2">
 <h2>CPLASS_paths</h2>
-<p>For running CPLASS on a collection of paths, we introduced the
-function <code>CPLASS_paths</code>.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>CPLASS_paths(data, PARALLEL = FALSE, time_rate, 
-                        lambda_r=1/30, iter_max = 5000, burn_in=500, 
-                        s_cap=1, gamma=1.01, speed_pen=TRUE, sd = NA,
-                        pen = &quot;ssic&quot;)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>data</strong></td>
-<td>A list of paths where for each path we can specify <span
-class="math inline">\(t,x,y\)</span></td>
-</tr>
-<tr class="even">
-<td><strong>time_rate</strong></td>
-<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
-</tr>
-<tr class="odd">
-<td><strong>PARALLEL</strong></td>
-<td>If <code>TRUE</code>, running parallel computing; if
-<code>FALSE</code>, running sequentially</td>
-</tr>
-<tr class="even">
-<td><strong>lambda_r</strong></td>
-<td>the rate used in the proposal of a new vector of changepoints</td>
-</tr>
-<tr class="odd">
-<td><strong>iter_max</strong></td>
-<td>The maximum number of iterations for running Metropolis-Hastings
-searching algorithm</td>
-</tr>
-<tr class="even">
-<td><strong>burn_in</strong></td>
-<td>The number of burn-in steps in MH search algorithm</td>
-</tr>
-<tr class="odd">
-<td><strong>s_cap</strong></td>
-<td>The threshold for the output speed. If the inferred speed exceed
-<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
-extra speed penalty will be introduced</td>
-</tr>
-<tr class="even">
-<td><strong>gamma</strong></td>
-<td>The power in the strengthened Schwarz Information Criterion
-(sSIC)</td>
-</tr>
-<tr class="odd">
-<td><strong>speed_pen</strong></td>
-<td>If <code>TRUE</code>, adding the speed penalty to the penalty
-function; if <code>FALSE</code>, we only use the linear penalty term
-sSIC</td>
-</tr>
-<tr class="even">
-<td><strong>sd</strong></td>
-<td>The standard deviation value of the noise of the data. If it is
-unknown, then CPLASS will estimate it.</td>
-</tr>
-<tr class="odd">
-<td><strong>pen</strong></td>
-<td>Either <code>aicc</code> or <code>ssic</code>. The options to choose
-the information criterion. <code>aicc</code> for the Corrected Akaike
-Information Criterion, <code>ssic</code> for the strengthened Schwarz
-Information Criterion.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A list of paths, in each path, there is a similar output with two
-sublists <code>segments_inferred</code> and <code>path_inferred</code>
-as described in the <code>CPLASS</code> function.</p>
-<p><strong>Warnings</strong></p>
-<p>At the moment, we do not encourage using <code>CPLASS_paths</code>
-unless you provide the correct format of the data so that
-<code>CPLASS_paths</code> can read it. We are working on updating this
-function so that it is more user-friendly in the near future. To run
-CPLASS with a list of paths, please click here <a
-href="example_on_running-CPLASS.html#cplass_paths">← CPLASS
-Analysis</a>.</p>
-</div>
-<div id="plot_path_inferred" class="section level2">
-<h2>plot_path_inferred</h2>
-<p><strong>Description</strong></p>
-<p>This function return a plot for a segmented path after running
-CPLASS.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>plot_path_inferred(path_info,xy_width = NA,t_lim = NA, motor, max_speed, state_shaded = TRUE, title_ind = NA, show_time_changes = FALSE)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>path_info</strong></td>
-<td>A list of segmented trajectory. The trajectory must contain the two
-sublists including <code>path_inferred</code> and
-<code>segment_inferred</code> information as <code>CPLASS</code>
-output.</td>
-</tr>
-<tr class="even">
-<td><strong>xy_width</strong></td>
-<td>Adjust the frame size of the plot</td>
-</tr>
-<tr class="odd">
-<td><strong>t_lim</strong></td>
-<td>The limit of <code>t</code> in the plot</td>
-</tr>
-<tr class="even">
-<td><strong>motor</strong></td>
-<td>Title of the plot, e.g., <code>motor = "Kinesin"</code></td>
-</tr>
-<tr class="odd">
-<td><strong>lambda_r</strong></td>
-<td>The rate used in the proposal of a new vector of changepoints</td>
-</tr>
-<tr class="even">
-<td><strong>max_speed</strong></td>
-<td>The maximum speed among all collection of inferred segment speeds
-after running CPLASS</td>
-</tr>
-<tr class="odd">
-<td><strong>state_shaded</strong></td>
-<td><code>TRUE</code> for showing the color of the motile/stationary
-segments</td>
-</tr>
-<tr class="even">
-<td><strong>title_ind</strong></td>
-<td><code>TRUE</code> for showing index of paths, e.g.,
-<code>path 1</code>, <code>path 2</code></td>
-</tr>
-<tr class="odd">
-<td><strong>show_time_changes</strong></td>
-<td><code>TRUE</code> for showing the change times in the plot with
-dashed lines</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A plot with four panels showing the xy plot, x-vs-t, y-vs-t, and a
-plot on segment durations/segment speeds.</p>
-<p><strong>Example</strong></p>
-<p><a href="visualization_tools.html#plot_path_inferred">← Visualization
-examples</a></p>
-</div>
-<div id="plot_path_actual_and_inferred" class="section level2">
-<h2>plot_path_actual_and_inferred</h2>
-<p><strong>Description</strong></p>
-<p>This function return a plot for a simulated trajectory where we can
-compare the actual vs inferred trajectories.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>plot_path_actual_and_inferred(path_info, xy_width = NA, t_lim = NA, state_shaded = TRUE)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>path_info</strong></td>
-<td>A list of segmented trajectory. The trajectory must contain the two
-sublists including <code>path_inferred</code> and
-<code>segment_inferred</code> information as <code>CPLASS</code>
-output.</td>
-</tr>
-<tr class="even">
-<td><strong>xy_width</strong></td>
-<td>Adjust the frame size of the plot</td>
-</tr>
-<tr class="odd">
-<td><strong>t_lim</strong></td>
-<td>The limit of <code>t</code> in the plot</td>
-</tr>
-<tr class="even">
-<td><strong>motor</strong></td>
-<td>Title of the plot, e.g., <code>motor = "Kinesin"</code></td>
-</tr>
-<tr class="odd">
-<td><strong>state_shaded</strong></td>
-<td><code>TRUE</code> for showing the color of the motile/stationary
-segments</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A plot with four panels showing the xy plot, x-vs-t, y-vs-t, and a
-plot on segment durations/segment speeds.</p>
-<p><strong>Example</strong></p>
-<p><a href="visualization_tools.html#plot_path_actual_and_inferred">←
-Visualization examples</a></p>
-</div>
-<div id="plot_csa" class="section level2">
-<h2>plot_csa</h2>
-<p><strong>Description</strong></p>
-<p>This function return a plot for a simulated trajectory where we can
-compare the actual vs inferred trajectories.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>plot_csa(csa, legend = TRUE)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>csa</strong></td>
-<td>A data frame that include calculated CSAs</td>
-</tr>
-<tr class="even">
-<td><strong>legend</strong></td>
-<td><code>TRUE</code> show the legend of the plot</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>CSA plot</p>
-<p><strong>Example</strong></p>
-<p><a href="visualization_tools.html#plot_csa">← Visualization
-examples</a></p>
+<pre class="r"><code># We will run on the 21PF data set with 3 paths.
+subdata = data%&gt;%filter(index_path%in%c(1,2,3)) #contains 3 paths
+cplass_path = list()
+for (i in 1:3)
+{
+     path = subdata %&gt;% filter(index_path == i)
+     t = path$t
+     x = path$x
+     y = path$y
+     time_rate = min(diff(t))
+     cplass_path[[i]] = CPLASS(t,x,y,time_rate,iter_max = 2000)
+}
+saveRDS(cplass_path,file=&quot;output/Example_3_paths_Periphery.rds&quot;)</code></pre>
+<p><strong>Visualization</strong></p>
+<p>Since we have a lot of paths here, it is better to save the plots
+into a pdf file to see them all together. The follow code will help us
+to do so. The output looks like this <a
+href="output/Real21PF_gallery.pdf">Real21PF_gallery</a>.</p>
+<pre class="r"><code>path_list = cplass_path
+
+
+file_list = c(&quot;21PF&quot;)
+filestub = paste0(&quot;output/Real&quot;,file_list[1])
+outfile = paste0(filestub,&quot;_gallery.pdf&quot;)
+
+ 
+motor = &quot;Perinuclear Lysosomes&quot; #change the name to the name of your data
+
+pdf_output = TRUE
+
+if (pdf_output == TRUE){
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste(&quot;Working on path&quot;,i))
+  }
+  
+ 
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed)
+  print(dashboard)
+
+  
+}
+
+if (pdf_output == TRUE){
+  dev.off()
+}</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1129,23 +775,38 @@ time zone: America/Chicago
 tzcode source: internal
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
 
 other attached packages:
-[1] workflowr_1.7.2
+ [1] kableExtra_1.4.0  knitr_1.50        igraph_2.1.4      here_1.0.1       
+ [5] ggthemes_5.1.0    earth_5.3.4       plotmo_3.6.4      plotrix_3.8-4    
+ [9] Formula_1.2-5     glmnet_4.1-10     Matrix_1.7-3      doParallel_1.0.17
+[13] iterators_1.0.14  foreach_1.5.2     patchwork_1.3.2   lubridate_1.9.4  
+[17] forcats_1.0.0     stringr_1.5.1     dplyr_1.1.4       purrr_1.1.0      
+[21] readr_2.1.5       tidyr_1.3.1       tibble_3.3.0      ggplot2_3.5.2    
+[25] tidyverse_2.0.0   limSolve_2.0.1    pracma_2.4.4      matrixcalc_1.0-6 
+[29] Rlab_4.0          workflowr_1.7.2  
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.5         knitr_1.50       
- [5] rlang_1.1.6       xfun_0.53         stringi_1.8.7     processx_3.8.6   
- [9] promises_1.3.3    jsonlite_2.0.0    glue_1.8.0        rprojroot_2.1.1  
-[13] git2r_0.36.2      htmltools_0.5.8.1 httpuv_1.6.16     ps_1.9.1         
-[17] sass_0.4.10       rmarkdown_2.29    jquerylib_0.1.4   tibble_3.3.0     
-[21] evaluate_1.0.4    fastmap_1.2.0     yaml_2.3.10       lifecycle_1.0.4  
-[25] whisker_0.4.1     stringr_1.5.1     compiler_4.5.1    fs_1.6.6         
-[29] pkgconfig_2.0.3   Rcpp_1.1.0        rstudioapi_0.17.1 later_1.4.3      
-[33] digest_0.6.37     R6_2.6.1          pillar_1.11.0     callr_3.7.6      
-[37] magrittr_2.0.3    bslib_0.9.0       tools_4.5.1       cachem_1.1.0     
-[41] getPass_0.2-4    </code></pre>
+ [1] tidyselect_1.2.1   viridisLite_0.4.2  farver_2.1.2       fastmap_1.2.0     
+ [5] promises_1.3.3     digest_0.6.37      timechange_0.3.0   lifecycle_1.0.4   
+ [9] survival_3.8-3     processx_3.8.6     magrittr_2.0.3     compiler_4.5.1    
+[13] rlang_1.1.6        sass_0.4.10        tools_4.5.1        yaml_2.3.10       
+[17] labeling_0.4.3     bit_4.6.0          xml2_1.4.0         RColorBrewer_1.1-3
+[21] withr_3.0.2        grid_4.5.1         git2r_0.36.2       scales_1.4.0      
+[25] MASS_7.3-65        cli_3.6.5          crayon_1.5.3       rmarkdown_2.29    
+[29] generics_0.1.4     rstudioapi_0.17.1  httr_1.4.7         tzdb_0.5.0        
+[33] cachem_1.1.0       splines_4.5.1      vctrs_0.6.5        jsonlite_2.0.0    
+[37] callr_3.7.6        hms_1.1.3          bit64_4.6.0-1      systemfonts_1.2.3 
+[41] jquerylib_0.1.4    glue_1.8.0         codetools_0.2-20   ps_1.9.1          
+[45] stringi_1.8.7      gtable_0.3.6       shape_1.4.6.1      later_1.4.3       
+[49] quadprog_1.5-8     pillar_1.11.0      htmltools_0.5.8.1  R6_2.6.1          
+[53] textshaping_1.0.1  rprojroot_2.1.1    vroom_1.6.5        lpSolve_5.6.23    
+[57] evaluate_1.0.4     lattice_0.22-7     httpuv_1.6.16      bslib_0.9.0       
+[61] Rcpp_1.1.0         svglite_2.2.1      whisker_0.4.1      xfun_0.53         
+[65] fs_1.6.6           getPass_0.2-4      pkgconfig_2.0.3   </code></pre>
+</div>
 </div>
 </div>
 </div>

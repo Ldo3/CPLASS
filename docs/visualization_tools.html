@@ -9,9 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Linh Do" />
+<meta name="author" content="Keisha J. Cook" />
+<meta name="author" content="Scott A. McKinley" />
 
 
-<title>Functions</title>
+<title>Visualization tools</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -286,7 +289,10 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Functions</h1>
+<h1 class="title toc-ignore">Visualization tools</h1>
+<h4 class="author">Linh Do</h4>
+<h4 class="author">Keisha J. Cook</h4>
+<h4 class="author">Scott A. McKinley</h4>
 
 </div>
 
@@ -515,11 +521,11 @@ have uncommitted changes.
 <div id="versions" class="tab-pane fade">
 <p>
 These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/functions.Rmd</code>) and HTML
-(<code>docs/functions.html</code>) files. If you’ve configured a remote
-Git repository (see <code>?wflow_git_remote</code>), click on the
-hyperlinks in the table below to view the files as they were in that
-past version.
+made to the R Markdown (<code>analysis/visualization_tools.Rmd</code>)
+and HTML (<code>docs/visualization_tools.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -560,91 +566,6 @@ Ldo3
 wflow_publish(c("analysis/."))
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-442169c
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-5f97658
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Add custom CSS
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-5f97658
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Add custom CSS
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-ef81878
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-4a45b93
-</td>
-<td>
-Ldo3
-</td>
-<td>
-2025-10-14
-</td>
-<td>
-wflow_publish(c("analysis/."))
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -652,35 +573,13 @@ wflow_publish(c("analysis/."))
 </div>
 </div>
 </div>
-<p>All functions that used in this projects</p>
-<ul>
-<li><p><a
-href="functions.html#cplass"><strong>CPLASS()</strong></a></p></li>
-<li><p><a
-href="functions.html#cplass_paths"><strong>CPLASS_paths()</strong></a></p></li>
-<li><p><a
-href="functions.html#plot_path_inferred"><strong>plot_path_inferred()</strong></a></p></li>
-<li><p><a
-href="functions.html#plot_path_actual_and_inferred"><strong>plot_path_actual_and_inferred()</strong></a></p></li>
-<li><p><a
-href="functions.html#plot_csa"><strong>plot_csa()</strong></a></p></li>
-</ul>
-<div id="cplass" class="section level2">
-<h2>CPLASS</h2>
-<p><strong>Description</strong></p>
-<p>This function runs the Continuous Piecewise Linear Approximation with
-Stochastic Search (CPLASS) algorithm on a 2D data in the form of <span
-class="math inline">\((x_i,y_i)_{i=1}^n\)</span> observed at time <span
-class="math inline">\((t_i)_{i=1}^n\)</span> believed to follow a
-continuous piecewise linear regression model (Gaussian noise). It is
-used for detecting changes in velocity problem. CPLASS returns the time
-changes, the estimated parameters.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code> CPLASS(t,x, y,time_rate, lambda_r=1/30, 
-                  iter_max = 5000, burn_in=500, s_cap=1, 
-                  gamma=1.01, speed_pen=TRUE, Diagnostic = FALSE, 
-                  sd = NA, pen = &quot;ssic&quot;) </code></pre>
-<p><strong>Arguments</strong></p>
+<p>In this pages, there are examples on how to plot paths and use
+Cumulative Speed Allocation (CSA) tool to compare between populations.
+For more details on CSA, we refer to the paper <a
+href="https://www.aimspress.com/article/doi/10.3934/mbe.2025095?viewType=HTML#b52">Cook,
+Rayens, Do, Payne and McKinley (2025)</a>.</p>
+<p>We provide plot functions for visualizing trajectories (please click
+to the function for more details) including:</p>
 <table>
 <colgroup>
 <col width="51%" />
@@ -688,423 +587,449 @@ changes, the estimated parameters.</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th>Argument</th>
+<th>Plot functions</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>x</strong></td>
-<td>A vector containing the data sequence (Cargo locations in
-x-axis)</td>
+<td><a
+href="functions.html#plot_path_inferred"><strong>plot_path_inferred()</strong></a></td>
+<td>Plot the segmented trajectories after running CPLASS</td>
 </tr>
 <tr class="even">
-<td><strong>y</strong></td>
-<td>A vector containing the data sequence (Cargo locations in
-y-axis)</td>
+<td><a
+href="functions.html#plot_path_actual_and_inferred"><strong>plot_path_actual_and_inferred()</strong></a></td>
+<td>Plot the actual overlap the inferred trajectories (for simulation
+data where we have the ground truth)</td>
 </tr>
 <tr class="odd">
-<td><strong>t</strong></td>
-<td>A vector containing time</td>
-</tr>
-<tr class="even">
-<td><strong>time_rate</strong></td>
-<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
-</tr>
-<tr class="odd">
-<td><strong>lambda_r</strong></td>
-<td>the rate used in the proposal of a new vector of changepoints</td>
-</tr>
-<tr class="even">
-<td><strong>iter_max</strong></td>
-<td>The maximum number of iterations for running Metropolis-Hastings
-searching algorithm</td>
-</tr>
-<tr class="odd">
-<td><strong>burn_in</strong></td>
-<td>The number of burn-in steps in MH search algorithm</td>
-</tr>
-<tr class="even">
-<td><strong>s_cap</strong></td>
-<td>The threshold for the output speed. If the inferred speed exceed
-<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
-extra speed penalty will be introduced</td>
-</tr>
-<tr class="odd">
-<td><strong>gamma</strong></td>
-<td>The power in the strengthened Schwarz Information Criterion
-(sSIC)</td>
-</tr>
-<tr class="even">
-<td><strong>speed_pen</strong></td>
-<td>If <code>TRUE</code>, adding the speed penalty to the penalty
-function; if <code>FALSE</code>, we only use the linear penalty term
-sSIC</td>
-</tr>
-<tr class="odd">
-<td><strong>Diagnostic</strong></td>
-<td>If <code>TRUE</code>, a dataframe with all of update in the
-stochastic search will be printed</td>
-</tr>
-<tr class="even">
-<td><strong>sd</strong></td>
-<td>The standard deviation value of the noise of the data. If it is
-unknown, then CPLASS will estimate it.</td>
-</tr>
-<tr class="odd">
-<td><strong>pen</strong></td>
-<td>Either <code>aicc</code> or <code>ssic</code>. The options to choose
-the information criterion. <code>aicc</code> for the Corrected Akaike
-Information Criterion, <code>ssic</code> for the strengthened Schwarz
-Information Criterion.</td>
+<td><a
+href="functions.html#plot_csa"><strong>plot_csa()</strong></a></td>
+<td>Plot Cummulative Speed Allocations</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Output</strong></p>
-<p>A list of <code>segment_inferred</code> and
-<code>path_inferred</code> will be returned after running the
-algorithm.</p>
-<ul>
-<li>The <code>segment_inferred</code> is a tibble containing 8
-columns</li>
-</ul>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Columns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>cp_times</strong></td>
-<td>The inferred change times</td>
-</tr>
-<tr class="even">
-<td><strong>durations</strong></td>
-<td>The inferred segment durations</td>
-</tr>
-<tr class="odd">
-<td><strong>states</strong></td>
-<td>A binary vector labeling the state of the associated segments,
-<code>0</code> for stationary, <code>1</code> for motile. The labels are
-created using the cut-off method with a threshold of 100nm/s</td>
-</tr>
-<tr class="even">
-<td><strong>speeds</strong></td>
-<td>The inferred segment speeeds</td>
-</tr>
-<tr class="odd">
-<td><strong>vx</strong></td>
-<td>The inferred velocity with respect to x-axis</td>
-</tr>
-<tr class="even">
-<td><strong>vy</strong></td>
-<td>The inferred velocity with respect to y-axis</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>The <code>path_inferred</code> is a tibble containing 6 columns</li>
-</ul>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Columns</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>t</strong></td>
-<td>The input time</td>
-</tr>
-<tr class="even">
-<td><strong>j</strong></td>
-<td>The label of time points corresponding to the labels of segments
-after using the cut-off method</td>
-</tr>
-<tr class="odd">
-<td><strong>x</strong></td>
-<td>The observed data with respect to x-axis</td>
-</tr>
-<tr class="even">
-<td><strong>y</strong></td>
-<td>The observed data with respect to y-axis</td>
-</tr>
-<tr class="odd">
-<td><strong>a</strong></td>
-<td>The inferred piecewise linear lines (anchor locations w.r.t
-x-axis)</td>
-</tr>
-<tr class="even">
-<td><strong>b</strong></td>
-<td>The inferred piecewise linear lines (anchor locations w.r.t
-y-axis)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Example</strong></p>
-<p><a href="example_on_running-CPLASS.html#cplass">← CPLASS
-Analysis</a></p>
-</div>
-<div id="cplass_paths" class="section level2">
-<h2>CPLASS_paths</h2>
-<p>For running CPLASS on a collection of paths, we introduced the
-function <code>CPLASS_paths</code>.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>CPLASS_paths(data, PARALLEL = FALSE, time_rate, 
-                        lambda_r=1/30, iter_max = 5000, burn_in=500, 
-                        s_cap=1, gamma=1.01, speed_pen=TRUE, sd = NA,
-                        pen = &quot;ssic&quot;)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>data</strong></td>
-<td>A list of paths where for each path we can specify <span
-class="math inline">\(t,x,y\)</span></td>
-</tr>
-<tr class="even">
-<td><strong>time_rate</strong></td>
-<td>Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1</td>
-</tr>
-<tr class="odd">
-<td><strong>PARALLEL</strong></td>
-<td>If <code>TRUE</code>, running parallel computing; if
-<code>FALSE</code>, running sequentially</td>
-</tr>
-<tr class="even">
-<td><strong>lambda_r</strong></td>
-<td>the rate used in the proposal of a new vector of changepoints</td>
-</tr>
-<tr class="odd">
-<td><strong>iter_max</strong></td>
-<td>The maximum number of iterations for running Metropolis-Hastings
-searching algorithm</td>
-</tr>
-<tr class="even">
-<td><strong>burn_in</strong></td>
-<td>The number of burn-in steps in MH search algorithm</td>
-</tr>
-<tr class="odd">
-<td><strong>s_cap</strong></td>
-<td>The threshold for the output speed. If the inferred speed exceed
-<code>s_cap</code> and the <code>speed_pen</code> is activated, then the
-extra speed penalty will be introduced</td>
-</tr>
-<tr class="even">
-<td><strong>gamma</strong></td>
-<td>The power in the strengthened Schwarz Information Criterion
-(sSIC)</td>
-</tr>
-<tr class="odd">
-<td><strong>speed_pen</strong></td>
-<td>If <code>TRUE</code>, adding the speed penalty to the penalty
-function; if <code>FALSE</code>, we only use the linear penalty term
-sSIC</td>
-</tr>
-<tr class="even">
-<td><strong>sd</strong></td>
-<td>The standard deviation value of the noise of the data. If it is
-unknown, then CPLASS will estimate it.</td>
-</tr>
-<tr class="odd">
-<td><strong>pen</strong></td>
-<td>Either <code>aicc</code> or <code>ssic</code>. The options to choose
-the information criterion. <code>aicc</code> for the Corrected Akaike
-Information Criterion, <code>ssic</code> for the strengthened Schwarz
-Information Criterion.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A list of paths, in each path, there is a similar output with two
-sublists <code>segments_inferred</code> and <code>path_inferred</code>
-as described in the <code>CPLASS</code> function.</p>
-<p><strong>Warnings</strong></p>
-<p>At the moment, we do not encourage using <code>CPLASS_paths</code>
-unless you provide the correct format of the data so that
-<code>CPLASS_paths</code> can read it. We are working on updating this
-function so that it is more user-friendly in the near future. To run
-CPLASS with a list of paths, please click here <a
-href="example_on_running-CPLASS.html#cplass_paths">← CPLASS
-Analysis</a>.</p>
-</div>
+<p>In this instructions, we continue using the
+<code>lysosome transport</code> in the Periphery region of cells from
+Payne’s lab. Please find the details on data collection here <a
+href="https://pubmed.ncbi.nlm.nih.gov/35202608/">Rayens, Cook, McKinley,
+and Payne</a>.</p>
+<pre class="r"><code>paths = readRDS(&quot;data/21PF/CPLASS_21PF_250_paths_sSIC_with_speed_pen.rds&quot;) #load your data here
+
+source(&quot;code/plot_functions.R&quot;)
+source(&quot;code/csa_functions.R&quot;)
+library(&quot;tidyverse&quot;)
+library(&quot;ggplot2&quot;)
+library(&quot;patchwork&quot;)</code></pre>
 <div id="plot_path_inferred" class="section level2">
 <h2>plot_path_inferred</h2>
-<p><strong>Description</strong></p>
-<p>This function return a plot for a segmented path after running
-CPLASS.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>plot_path_inferred(path_info,xy_width = NA,t_lim = NA, motor, max_speed, state_shaded = TRUE, title_ind = NA, show_time_changes = FALSE)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>path_info</strong></td>
-<td>A list of segmented trajectory. The trajectory must contain the two
-sublists including <code>path_inferred</code> and
-<code>segment_inferred</code> information as <code>CPLASS</code>
-output.</td>
-</tr>
-<tr class="even">
-<td><strong>xy_width</strong></td>
-<td>Adjust the frame size of the plot</td>
-</tr>
-<tr class="odd">
-<td><strong>t_lim</strong></td>
-<td>The limit of <code>t</code> in the plot</td>
-</tr>
-<tr class="even">
-<td><strong>motor</strong></td>
-<td>Title of the plot, e.g., <code>motor = "Kinesin"</code></td>
-</tr>
-<tr class="odd">
-<td><strong>lambda_r</strong></td>
-<td>The rate used in the proposal of a new vector of changepoints</td>
-</tr>
-<tr class="even">
-<td><strong>max_speed</strong></td>
-<td>The maximum speed among all collection of inferred segment speeds
-after running CPLASS</td>
-</tr>
-<tr class="odd">
-<td><strong>state_shaded</strong></td>
-<td><code>TRUE</code> for showing the color of the motile/stationary
-segments</td>
-</tr>
-<tr class="even">
-<td><strong>title_ind</strong></td>
-<td><code>TRUE</code> for showing index of paths, e.g.,
-<code>path 1</code>, <code>path 2</code></td>
-</tr>
-<tr class="odd">
-<td><strong>show_time_changes</strong></td>
-<td><code>TRUE</code> for showing the change times in the plot with
-dashed lines</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A plot with four panels showing the xy plot, x-vs-t, y-vs-t, and a
-plot on segment durations/segment speeds.</p>
-<p><strong>Example</strong></p>
-<p><a href="visualization_tools.html#plot_path_inferred">← Visualization
-examples</a></p>
+<div id="plot-a-single-path" class="section level3">
+<h3>Plot a single path</h3>
+<pre class="r"><code>path_index = c(49)
+# # If you want to select a certain path, use these lines
+path_list = list(paths[[path_index]])
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor =&quot;Periphery&quot; #change the name for your data
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste(&quot;Working on path&quot;,i))
+  }
+  
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed, title_ind = path_index, show_time_changes = TRUE)
+  
+  print(dashboard)
+  
+}</code></pre>
+<p><img src="figure/visualization_tools.Rmd/plot%20specific%20paths-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-all-paths-and-create-a-gallery" class="section level3">
+<h3>Plot all paths and create a gallery</h3>
+<p>The following code will help to save all of paths into a .pdf
+gallery. The output looks like this <a
+href="output/Periphery_gallery.pdf">Periphery_gallery</a>.</p>
+<pre class="r"><code>pdf_output = TRUE
+path_list = paths
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor =&quot;Periphery&quot;
+
+if (pdf_output == TRUE){
+ 
+  outfile = paste0(&quot;output/&quot;,motor,&quot;_gallery.pdf&quot;)
+  
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste(&quot;Working on path&quot;,i))
+  }
+  
+  dashboard = plot_path_inferred(path_list[[i]],xy_width,t_lim, motor, max_speed)
+  
+  print(dashboard)
+  
+}
+if (pdf_output == TRUE){
+  dev.off()
+}
+
+</code></pre>
+</div>
 </div>
 <div id="plot_path_actual_and_inferred" class="section level2">
 <h2>plot_path_actual_and_inferred</h2>
-<p><strong>Description</strong></p>
-<p>This function return a plot for a simulated trajectory where we can
-compare the actual vs inferred trajectories.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>plot_path_actual_and_inferred(path_info, xy_width = NA, t_lim = NA, state_shaded = TRUE)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<colgroup>
-<col width="51%" />
-<col width="48%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>path_info</strong></td>
-<td>A list of segmented trajectory. The trajectory must contain the two
-sublists including <code>path_inferred</code> and
-<code>segment_inferred</code> information as <code>CPLASS</code>
-output.</td>
-</tr>
-<tr class="even">
-<td><strong>xy_width</strong></td>
-<td>Adjust the frame size of the plot</td>
-</tr>
-<tr class="odd">
-<td><strong>t_lim</strong></td>
-<td>The limit of <code>t</code> in the plot</td>
-</tr>
-<tr class="even">
-<td><strong>motor</strong></td>
-<td>Title of the plot, e.g., <code>motor = "Kinesin"</code></td>
-</tr>
-<tr class="odd">
-<td><strong>state_shaded</strong></td>
-<td><code>TRUE</code> for showing the color of the motile/stationary
-segments</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>A plot with four panels showing the xy plot, x-vs-t, y-vs-t, and a
-plot on segment durations/segment speeds.</p>
-<p><strong>Example</strong></p>
-<p><a href="visualization_tools.html#plot_path_actual_and_inferred">←
-Visualization examples</a></p>
+<p>This function is useful for evaluation the performance of CPLASS
+inferred trajectories on the simulation data sets.</p>
+<div id="plot-a-single-path-1" class="section level3">
+<h3>Plot a single path</h3>
+<pre class="r"><code>paths = readRDS(&quot;data/sim13CKP/Sim13_CKP_25Hz_cplass_with_speed_theory.rds&quot;)
+path_index = c(15)
+# # If you want to select a certain path, use these lines
+path_list = list(paths[[path_index]])
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor =&quot;Simulation: Base&quot; #change the name for your data
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste(&quot;Working on path&quot;,i))
+  }
+  
+  dashboard = plot_path_actual_and_inferred(path_list[[i]],xy_width,t_lim)
+  
+  print(dashboard)
+  
+}</code></pre>
+<pre><code>Warning: Removed 2 rows containing missing values or values outside the scale range
+(`geom_path()`).
+Removed 2 rows containing missing values or values outside the scale range
+(`geom_path()`).</code></pre>
+<p><img src="figure/visualization_tools.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-all-paths-and-create-a-gallery-1" class="section level3">
+<h3>Plot all paths and create a gallery</h3>
+<p>The following code will help to save all of paths into a .pdf
+gallery. The output looks like this <a
+href="output/CKP13_gallery.pdf">Simulated_base_gallery</a>.</p>
+<pre class="r"><code>pdf_output = TRUE
+path_list = paths
+
+dist_max = c()
+t_max = c()
+speed_max = c()
+motor =&quot;CKP13&quot;
+
+if (pdf_output == TRUE){
+ 
+  outfile = paste0(&quot;docs/output/&quot;,motor,&quot;_gallery.pdf&quot;)
+  
+  pdf(outfile,onefile = TRUE,width=7,height=5)
+}
+
+
+
+for (i in 1:length(path_list)){
+  path = path_list[[i]]$path_inferred
+  segments = path_list[[i]]$segments_inferred
+  speed_max = c(speed_max,max(path_list[[i]]$segments_inferred$speeds))
+  
+  dist_max = c(dist_max,max(c(max(path$x)-min(path$x)),
+                            max((path$y)-min(path$y))))
+  t_max = c(t_max,max(path$t) - min(path$t))
+}
+xy_width = 1.2*max(dist_max)
+t_lim = c(0,ceiling(max(t_max)))
+max_speed = ceiling(max(speed_max))
+
+for (i in 1:length(path_list)){
+  if (i %% 20 == 0){
+    print(paste(&quot;Working on path&quot;,i))
+  }
+  
+  dashboard = plot_path_actual_and_inferred(path_list[[i]],xy_width,t_lim)
+  
+  print(dashboard)
+  
+}
+if (pdf_output == TRUE){
+  dev.off()
+}
+
+</code></pre>
+</div>
 </div>
 <div id="plot_csa" class="section level2">
 <h2>plot_csa</h2>
-<p><strong>Description</strong></p>
-<p>This function return a plot for a simulated trajectory where we can
-compare the actual vs inferred trajectories.</p>
-<p><strong>Usage</strong></p>
-<pre class="r"><code>plot_csa(csa, legend = TRUE)</code></pre>
-<p><strong>Arguments</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th>Argument</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>csa</strong></td>
-<td>A data frame that include calculated CSAs</td>
-</tr>
-<tr class="even">
-<td><strong>legend</strong></td>
-<td><code>TRUE</code> show the legend of the plot</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Output</strong></p>
-<p>CSA plot</p>
-<p><strong>Example</strong></p>
-<p><a href="visualization_tools.html#plot_csa">← Visualization
-examples</a></p>
+<p>The following is the code to reproduce the Figure 8 in CPLASS paper
+(will be available soon) where we create CSA plots one for comparing
+lysosomal transport in perinuclear and periphery regions and one for
+comparing the sucrose-treated groups restricted to the periphery rgion
+of the cell. Please see <a
+href="https://pubmed.ncbi.nlm.nih.gov/35202608/">Rayens, Cook, McKinley,
+and Payne</a> for more details on the data, and <a
+href="https://www.aimspress.com/article/doi/10.3934/mbe.2025095">Cook,
+Rayens, <strong>Do</strong>, Payne , McKinley</a> for the calculation of
+CSA.</p>
+<pre class="r"><code>pdf_output = TRUE
+folder_name = c(&quot;data/21PF/&quot;, &quot;data/20PFS_and_PFL/&quot;)
+real_data_file1 = paste0(folder_name[1],&quot;CPLASS_21PN_250_paths_sSIC_with_speed_pen.rds&quot;)
+real_data_file2 = paste0(folder_name[1],&quot;CPLASS_21PF_250_paths_sSIC_with_speed_pen.rds&quot;)
+
+real_path_list1 = readRDS(real_data_file1)
+real_path_list2 = readRDS(real_data_file2)
+
+
+cohort_list = c(&quot;Control Perinuclear&quot;, 
+                &quot;Control Periphery&quot;)
+color_list = c(&quot;Control Perinuclear&quot; = &quot;#1B9E77&quot;, 
+               &quot;Control Periphery&quot; =&quot;#377EB8&quot;) 
+
+pdf_output = TRUE
+
+##### Create Segment Summary ####
+segment_summary = summarize_segments_inferred(real_path_list1,cohort_list[1])
+segment_summary = bind_rows(segment_summary, 
+summarize_segments_inferred(real_path_list2,cohort_list[2]))
+
+max_speed = min(1.2,max(segment_summary$speeds))
+
+# Assumes theta is the same for all frame rates involved
+speed_mesh = seq(0,max_speed,length = 200)
+ds = speed_mesh[2] - speed_mesh[1]
+subsample_size = 200
+num_subsamples = 30
+
+csa1 = tibble()
+
+#### Bootstrap CSA for Real Data 1 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list1),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list1[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,&quot;Sample&quot;)
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa1 = bind_rows(csa1,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[1],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+csa2 = tibble()
+#### Bootstrap CSA for Real Data 2 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list2),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list2[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,&quot;Sample&quot;)
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa2 = bind_rows(csa2,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[2],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+
+csa_both = bind_rows(csa1,csa2)
+
+csa_both = csa_both %&gt;% mutate(cohort = paste(label,subsample))
+
+p_csa_compare1 = ggplot(csa_both %&gt;% filter(label == cohort_list[1] | 
+                                      label == cohort_list[2]))+
+  geom_line(aes(x = s, y = csa, col = label, group = cohort))+
+  # ggtitle(&quot;Lysosome Periphery Large vs Small&quot;)+
+  ylab(&quot;Cumulative Speed Allocation&quot;)+xlab(expression(paste(&quot;Speed (&quot;,mu,&quot;m/sec)&quot;)))+
+  scale_color_manual(values = color_list)+
+  theme_minimal()+
+     theme(
+    legend.position = c(0.8, 0.2),  # Adjust position inside the plot
+    legend.background = element_rect(fill = &quot;white&quot;, color = &quot;black&quot;)
+  )+labs(color = NULL)</code></pre>
+<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2
+3.5.0.
+ℹ Please use the `legend.position.inside` argument of `theme()` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+generated.</code></pre>
+<pre class="r"><code>print(p_csa_compare1)</code></pre>
+<p><img src="figure/visualization_tools.Rmd/FIGURE:%20CSA%20Compare%201-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pdf_output = TRUE
+real_data_file1 = paste0(folder_name[2],&quot;CPLASS_20PFL_250_paths_sSIC_with_speed_pen.rds&quot;)
+real_data_file2 = paste0(folder_name[2],&quot;CPLASS_20PFS_250_paths_sSIC_with_speed_pen.rds&quot;)
+
+real_path_list1 = readRDS(real_data_file1)
+real_path_list2 = readRDS(real_data_file2)
+
+cohort_list = c(&quot;Sucrose Large&quot;, 
+                &quot;Sucrose Small&quot;)
+color_list = c(&quot;Sucrose Large&quot; = &quot;#1B9E77&quot;, 
+               &quot;Sucrose Small&quot; =&quot;#377EB8&quot;) 
+
+pdf_output = TRUE
+
+
+##### Create Segment Summary ####
+segment_summary = summarize_segments_inferred(real_path_list1,cohort_list[1])
+segment_summary = bind_rows(segment_summary,
+                            summarize_segments_inferred(real_path_list2,cohort_list[2]))
+
+
+max_speed = min(1.2,max(segment_summary$speeds))
+
+# Assumes theta is the same for all frame rates involved
+speed_mesh = seq(0,max_speed,length = 200)
+ds = speed_mesh[2] - speed_mesh[1]
+subsample_size = 200
+num_subsamples = 30
+
+csa1 = tibble()
+#### Bootstrap CSA for Real Data 1 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list1),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list1[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,&quot;Sample&quot;)
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa1 = bind_rows(csa1,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[1],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+csa2 = tibble()
+#### Bootstrap CSA for Real Data 2 ####
+for (m in 1:num_subsamples){
+    subsample = sample(1:length(real_path_list2),subsample_size,replace = TRUE)
+    path_subsample = list()
+    for (i in 1:length(subsample)){
+      path_subsample[[i]] = real_path_list2[[subsample[i]]]
+    }
+    this_segments_summary = summarize_segments_inferred(path_subsample,&quot;Sample&quot;)
+    this_csa = compute_csa(this_segments_summary, speed_mesh)$csa
+    csa2 = bind_rows(csa2,
+                tibble(
+                  s = speed_mesh,
+                  csa = this_csa,
+                  dcsa = c(diff(this_csa)/ds,0),
+                  error = NA,
+                  error_pct = NA,
+                  label = cohort_list[2],
+                  Hz = 20,
+                  subsample = m
+                ))
+}
+
+
+csa_both = bind_rows(csa1,csa2)
+csa_both = csa_both %&gt;% mutate(cohort = paste(label,subsample))
+
+p_csa_compare2 = ggplot(csa_both %&gt;% filter(label == cohort_list[1] | 
+                                      label == cohort_list[2]))+
+  geom_line(aes(x = s, y = csa, col = label, group = cohort))+
+  # ggtitle(&quot;Lysosome Periphery Large vs Small&quot;)+
+  ylab(&quot;Cumulative Speed Allocation&quot;)+xlab(expression(paste(&quot;Speed (&quot;,mu,&quot;m/sec)&quot;)))+
+  scale_color_manual(values = color_list)+
+  theme_minimal()+
+     theme(
+    legend.position = c(0.85, 0.2),  # Adjust position inside the plot
+    legend.background = element_rect(fill = &quot;white&quot;, color = &quot;black&quot;)
+  )+labs(color = NULL)
+print(p_csa_compare2)</code></pre>
+<p><img src="figure/visualization_tools.Rmd/FIGURE:%20CSA%20Compare%202-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p_csa_full = (p_csa_compare1 + p_csa_compare2)
+
+if (pdf_output == TRUE){
+  outfile = paste0(&quot;docs/output/Figure_CSA_compare_PN_PF_PFL_PFS.pdf&quot;)
+  pdf(outfile,onefile = TRUE,width=9.5,height=3)
+}
+
+print(p_csa_full)
+
+if (pdf_output == TRUE){
+  dev.off()
+}</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1132,20 +1057,24 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.7.2
+ [1] patchwork_1.3.2 lubridate_1.9.4 forcats_1.0.0   stringr_1.5.1  
+ [5] dplyr_1.1.4     purrr_1.1.0     readr_2.1.5     tidyr_1.3.1    
+ [9] tibble_3.3.0    ggplot2_3.5.2   tidyverse_2.0.0 workflowr_1.7.2
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       httr_1.4.7        cli_3.6.5         knitr_1.50       
- [5] rlang_1.1.6       xfun_0.53         stringi_1.8.7     processx_3.8.6   
- [9] promises_1.3.3    jsonlite_2.0.0    glue_1.8.0        rprojroot_2.1.1  
-[13] git2r_0.36.2      htmltools_0.5.8.1 httpuv_1.6.16     ps_1.9.1         
-[17] sass_0.4.10       rmarkdown_2.29    jquerylib_0.1.4   tibble_3.3.0     
-[21] evaluate_1.0.4    fastmap_1.2.0     yaml_2.3.10       lifecycle_1.0.4  
-[25] whisker_0.4.1     stringr_1.5.1     compiler_4.5.1    fs_1.6.6         
-[29] pkgconfig_2.0.3   Rcpp_1.1.0        rstudioapi_0.17.1 later_1.4.3      
-[33] digest_0.6.37     R6_2.6.1          pillar_1.11.0     callr_3.7.6      
-[37] magrittr_2.0.3    bslib_0.9.0       tools_4.5.1       cachem_1.1.0     
-[41] getPass_0.2-4    </code></pre>
+ [1] sass_0.4.10        generics_0.1.4     stringi_1.8.7      hms_1.1.3         
+ [5] digest_0.6.37      magrittr_2.0.3     timechange_0.3.0   evaluate_1.0.4    
+ [9] grid_4.5.1         RColorBrewer_1.1-3 fastmap_1.2.0      rprojroot_2.1.1   
+[13] jsonlite_2.0.0     processx_3.8.6     whisker_0.4.1      ps_1.9.1          
+[17] promises_1.3.3     httr_1.4.7         scales_1.4.0       jquerylib_0.1.4   
+[21] cli_3.6.5          crayon_1.5.3       rlang_1.1.6        withr_3.0.2       
+[25] cachem_1.1.0       yaml_2.3.10        tools_4.5.1        tzdb_0.5.0        
+[29] httpuv_1.6.16      vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4   
+[33] git2r_0.36.2       fs_1.6.6           pkgconfig_2.0.3    callr_3.7.6       
+[37] pillar_1.11.0      bslib_0.9.0        later_1.4.3        gtable_0.3.6      
+[41] glue_1.8.0         Rcpp_1.1.0         xfun_0.53          tidyselect_1.2.1  
+[45] rstudioapi_0.17.1  knitr_1.50         farver_2.1.2       htmltools_0.5.8.1 
+[49] labeling_0.4.3     rmarkdown_2.29     compiler_4.5.1     getPass_0.2-4     </code></pre>
 </div>
 </div>
 </div>
