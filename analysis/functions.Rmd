@@ -32,7 +32,7 @@ This function runs the Continuous Piecewise Linear Approximation with Stochastic
 **Usage**
 
 ```r
- CPLASS(t,x, y,time_rate, lambda_r=1/30, 
+ CPLASS(t,x, y, lambda_r=1/30, 
                   iter_max = 5000, burn_in=500, s_cap=1, 
                   gamma=1.01, speed_pen=TRUE, Diagnostic = FALSE, 
                   sd = NA, pen = "ssic") 
@@ -45,7 +45,6 @@ This function runs the Continuous Piecewise Linear Approximation with Stochastic
 | **x**        | A vector containing the data sequence (Cargo locations in x-axis) |
 | **y**        | A vector containing the data sequence (Cargo locations in y-axis) |
 | **t**        | A vector containing time |
-| **time_rate**        | Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1 |
 | **lambda_r** | the rate used in the proposal of a new vector of changepoints |
 | **iter_max** | The maximum number of iterations for running Metropolis-Hastings searching algorithm |
 | **burn_in**    | The number of burn-in steps in MH search algorithm|
@@ -94,7 +93,7 @@ For running CPLASS on a collection of paths, we introduced the function `CPLASS_
 **Usage**
 
 ```r
-CPLASS_paths(data, PARALLEL = FALSE, time_rate, 
+CPLASS_paths(data, PARALLEL = FALSE,
                         lambda_r=1/30, iter_max = 5000, burn_in=500, 
                         s_cap=1, gamma=1.01, speed_pen=TRUE, sd = NA,
                         pen = "ssic")
@@ -105,7 +104,6 @@ CPLASS_paths(data, PARALLEL = FALSE, time_rate,
 | Argument     | Description |
 |--------------|-------------|
 | **data**     | A list of paths where for each path we can specify $t,x,y$ |
-| **time_rate**| Time step, e.g., 0.001, 0.01, 0.04, 0.05, 0.1, 1 |
 | **PARALLEL** | If `TRUE`, running parallel computing; if `FALSE`, running sequentially
 | **lambda_r** | the rate used in the proposal of a new vector of changepoints |
 | **iter_max** | The maximum number of iterations for running Metropolis-Hastings searching algorithm |
