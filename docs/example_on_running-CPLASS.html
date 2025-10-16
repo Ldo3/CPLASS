@@ -460,15 +460,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLdo3CPLASStreecb5eb242495c00ac40229c9b02fe54984bbcf89etargetblankcb5eb24a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomLdo3CPLASStree19bd762a73231fdd0e5d39ae5662d43100fe66d5targetblank19bd762a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/Ldo3/CPLASS/tree/cb5eb242495c00ac40229c9b02fe54984bbcf89e" target="_blank">cb5eb24</a>
+<a href="https://github.com/Ldo3/CPLASS/tree/19bd762a73231fdd0e5d39ae5662d43100fe66d5" target="_blank">19bd762</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomLdo3CPLASStreecb5eb242495c00ac40229c9b02fe54984bbcf89etargetblankcb5eb24a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomLdo3CPLASStree19bd762a73231fdd0e5d39ae5662d43100fe66d5targetblank19bd762a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -478,7 +478,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/Ldo3/CPLASS/tree/cb5eb242495c00ac40229c9b02fe54984bbcf89e" target="_blank">cb5eb24</a>.
+<a href="https://github.com/Ldo3/CPLASS/tree/19bd762a73231fdd0e5d39ae5662d43100fe66d5" target="_blank">19bd762</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -541,6 +541,41 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/Ldo3/CPLASS/blob/19bd762a73231fdd0e5d39ae5662d43100fe66d5/analysis/example_on_running-CPLASS.Rmd" target="_blank">19bd762</a>
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-16
+</td>
+<td>
+wflow_publish(c("analysis/example_on_running-CPLASS.Rmd",
+"code/CPLASS.R"))
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/Ldo3/CPLASS/582808487efda46a3a82c8aea0525da01425c4d6/docs/example_on_running-CPLASS.html" target="_blank">5828084</a>
+</td>
+<td>
+Ldo3
+</td>
+<td>
+2025-10-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -692,7 +727,7 @@ Y-position of the particle
 </tbody>
 </table>
 <pre class="r"><code>data = read_csv(&quot;data/Real_21_Periphery.csv&quot;) #load your data here</code></pre>
-<p>In the following, let’s CPLASS for a single path and plot the
+<p>In the following, let’s run CPLASS for a single path and plot the
 trajectory.</p>
 </div>
 <div id="cplass" class="section level2">
@@ -703,10 +738,9 @@ path = data %&gt;% filter(index_path == 1)
 t = path$t
 x = path$x
 y = path$y
-time_rate = min(diff(t))
 
 # Step 2: running CPLASS
-cplass = CPLASS(t,x,y,time_rate,iter_max = 2000) #notice that I am using the default but you can change any argument to adjust the MCMC steps, burn-in steps, speed limit threshold, turn-on or turn off the speed penalty, and so on
+cplass = CPLASS(t,x,y,iter_max = 2000) #notice that I am using the default but you can change any argument to adjust the MCMC steps, burn-in steps, speed limit threshold, turn-on or turn off the speed penalty, and so on
 
 # Step 3: save the output as .rds file
 saveRDS(cplass,file=&quot;output/Example_path_1_Periphery.rds&quot;)</code></pre>
@@ -775,7 +809,7 @@ for (i in 1:3)
      x = path$x
      y = path$y
      time_rate = min(diff(t))
-     cplass_path[[i]] = CPLASS(t,x,y,time_rate,iter_max = 2000)
+     cplass_path[[i]] = CPLASS(t,x,y,iter_max = 2000)
 }
 saveRDS(cplass_path,file=&quot;output/Example_3_paths_Periphery.rds&quot;)</code></pre>
 <p><strong>Visualization</strong></p>
