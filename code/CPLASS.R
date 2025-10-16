@@ -13,12 +13,12 @@ library("doParallel")
 library(igraph)
 library(readr)
 
-CPLASS<- function(t,x, y,time_rate, lambda_r=1/30, 
+CPLASS<- function(t,x, y, lambda_r=1/30, 
                   iter_max = 5000, burn_in=500, s_cap=1, 
                   gamma=1.01, speed_pen=TRUE, Diagnostic = FALSE, 
                   sd = NA, pen = "ssic")
 {
-     
+     dt = min(diff(t))
      n <- length(t)
 
      if (speed_pen == TRUE) {
@@ -32,7 +32,7 @@ CPLASS<- function(t,x, y,time_rate, lambda_r=1/30,
      attempt <- 1
      pl = list()
      repeat {
-          MCMC <- try(MHsearch(t, x, y, time_rate, lambda_r = lambda_r,
+          MCMC <- try(MHsearch(t, x, y, dt, lambda_r = lambda_r,
                             iter_max = iter_max, burn_in = burn_in,
                             s_cap = s_cap, gamma = gamma,
                             speed_control = speed_control, sd = NA, pen ="ssic"),
@@ -68,13 +68,13 @@ CPLASS<- function(t,x, y,time_rate, lambda_r=1/30,
 }
 
 # MHsearch() : Metropolis-Hastings algorithm with tailored proposal functions for stochastics search
-MHsearch<- function(t,x, y,time_rate, lambda_r=1/30, 
+MHsearch<- function(t,x, y,dt, lambda_r=1/30, 
                     iter_max = 5000, burn_in=500, s_cap=1, 
                     gamma=1.01, speed_control=0, sd = NA, pen ="ssic")
 {
      #N: sample size
      #r0: is the initial vector of switching process, this (N-2) dim vector contains 0s, 1s
-     #time_rate: e.g. 0.05 for 20Hz, 0.1 for 10Hz, 1 for 100Hz, 0.02 for 50Hz
+     #dt: e.g. 0.05 for 20Hz, 0.1 for 10Hz, 1 for 100Hz, 0.02 for 50Hz
      #lambda_r: the rate in Bernoulli process used to propose a random vector of changepoints r
      #iter_max: number of interations in running Markov Chain Monte Carlo
      #burn_in: number of burn in steps
@@ -86,7 +86,7 @@ MHsearch<- function(t,x, y,time_rate, lambda_r=1/30,
      # Initial values
      N = length(t)
      penalty_coef = max(4,log(N))^gamma # strengthened Schwarz Criterion
-     r0 = q_new(lambda_r, time_rate = time_rate, N) #not include the starting and the ending points of the path
+     r0 = q_new(lambda_r, dt = dt, N) #not include the starting and the ending points of the path
      indexcp= which(r0==1)
      cps0 = indexcp+1 #initial index of changepoint times
      initial_input = piecewise_linear_con(t, x, y, cps0)
@@ -125,7 +125,7 @@ MHsearch<- function(t,x, y,time_rate, lambda_r=1/30,
 
           ##### RUNNING METROPOLIS-HASTING ######
           u = runif(1)
-          pp = proposal_function(u, r0, N, lambda_r, time_rate = time_rate)
+          pp = proposal_function(u, r0, N, lambda_r, dt = dt)
           r_prop = pp$r_prop
           status = pp$status
 
@@ -141,7 +141,7 @@ MHsearch<- function(t,x, y,time_rate, lambda_r=1/30,
           if (l_prop$logical ==FALSE || l_cur$logical == FALSE){
                A =0
           }else if(l_prop$s ==0){A=0}else{
-               logA = l_prop$s+pproposal(u, r0, N, lambda_r, r_prop, 1-status, time_rate = time_rate)-l_cur$s-pproposal(u, r_prop, N, lambda_r, r0, status, time_rate = time_rate)
+               logA = l_prop$s+pproposal(u, r0, N, lambda_r, r_prop, 1-status, dt = dt)-l_cur$s-pproposal(u, r_prop, N, lambda_r, r0, status, dt = dt)
           }
 
 
@@ -217,16 +217,16 @@ MHsearch<- function(t,x, y,time_rate, lambda_r=1/30,
 # Proposal functions:
 
 #1. Independent switch point process
-log_q_new_pmf <- function(lambda_r, time_rate, N, r)
+log_q_new_pmf <- function(lambda_r, dt, N, r)
 {
      K_r = sum(r) #number of change points
-     p = K_r * log(1-exp(-lambda_r*time_rate)) - (N-2-K_r)*(lambda_r*time_rate)
+     p = K_r * log(1-exp(-lambda_r*dt)) - (N-2-K_r)*(lambda_r*dt)
      return(p) #output is a number
 }
 
-q_new <- function(lambda_r, time_rate, N)
+q_new <- function(lambda_r, dt, N)
 {
-     p = 1-exp(-lambda_r*time_rate)
+     p = 1-exp(-lambda_r*dt)
      return(rbern(N-2,p))
 }
 
@@ -400,11 +400,11 @@ log_q_bd2_pmf<-function(r, status)
      return(log(p))
 }
 # Final proposal function
-proposal_function<-function(u, r_cur, N, lambda_r, time_rate)
+proposal_function<-function(u, r_cur, N, lambda_r, dt)
 {
      if (!any(r_cur==0)||!any(r_cur==1)){
           if (0<=u && u<=1/4){
-               r_prop = q_new(lambda_r, time_rate, N)
+               r_prop = q_new(lambda_r, dt, N)
                status = 2
                }else if(1/4<u &&u<=1/2){
                     pp = q_bd(r_cur)
@@ -417,7 +417,7 @@ proposal_function<-function(u, r_cur, N, lambda_r, time_rate)
                          }
           }else{
                if (0<=u && u<=1/4){
-                    r_prop = q_new(lambda_r, time_rate, N)
+                    r_prop = q_new(lambda_r, dt, N)
                     status = 2
                     }else if(1/4<u &&u<=3/8){
                          pp = q_bd(r_cur)
@@ -437,11 +437,11 @@ proposal_function<-function(u, r_cur, N, lambda_r, time_rate)
 }
 
 ### PDF of the proprosal function
-pproposal<-function(u, r, N, lambda_r, r_given, status, time_rate)
+pproposal<-function(u, r, N, lambda_r, r_given, status, dt)
 {
      if (!any(r_given==0)||!any(r_given==1)){
           if (0<=u && u<=1/4){
-               logp= log_q_new_pmf(lambda_r,time_rate, N, r)
+               logp= log_q_new_pmf(lambda_r,dt, N, r)
                }else if(1/4<u &&u<=1/2){
                     logp = log_q_bd_pmf(r_given,status)
                     }else{
@@ -449,7 +449,7 @@ pproposal<-function(u, r, N, lambda_r, r_given, status, time_rate)
                          }
           }else{
                if (0<=u && u<=1/4){
-                    logp = log_q_new_pmf(lambda_r, time_rate, N, r)
+                    logp = log_q_new_pmf(lambda_r, dt, N, r)
                     }else if(1/4<u &&u<=3/8){
                          logp = log_q_bd_pmf(r_given,status)
                          }else if(3/8<u && u<=1/2){
